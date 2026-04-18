@@ -471,7 +471,7 @@ header p  { font-size:.85rem; color:rgba(245,237,224,.5); letter-spacing:.15em; 
 .org-banda-empty { background:rgba(255,255,255,.02); border:1px dashed rgba(255,255,255,.08); border-radius:6px; padding:8px 14px; text-align:center; font-size:.65rem; color:rgba(245,237,224,.2); font-style:italic; margin:2px 0; }
 
 /* Separator */
-.org-sep { height:1px; background:rgba(255,255,255,.07); margin:4px 0; }
+.org-sep { height:2px; background:rgba(201,168,76,.25); margin:10px 0; border-radius:1px; }
 
 /* Bloque central */
 .org-bloque-central { grid-column:1/-1; background:rgba(139,26,26,.15); border:1px solid rgba(139,26,26,.4); border-radius:8px; padding:12px 16px; text-align:center; margin:8px 0; }
@@ -721,6 +721,7 @@ header p  { font-size:.85rem; color:rgba(245,237,224,.5); letter-spacing:.15em; 
       <div class="bstat"><div class="bstat-n" id="bcnt-comp" style="color:#4caf82">0</div><div class="bstat-l">Componentes</div></div>
     </div>
     <button class="btn-add-banda" id="btnAddBanda">+ NUEVA BANDA</button>
+    <button class="btn-add-banda" id="btnExportBandas" style="background:linear-gradient(135deg,#cf5b5b,#a33);">&#128196; Exportar PDF</button>
   </div>
   <div class="bandas-grid" id="bandasGrid"></div>
 </div>
@@ -731,6 +732,7 @@ header p  { font-size:.85rem; color:rgba(245,237,224,.5); letter-spacing:.15em; 
     <div class="org-header">
       <div class="org-title">Organigrama del Desfile</div>
       <div class="org-subtitle">Solo poblaciones con estado ASISTE, ordenadas alfabeticamente.</div>
+      <button id="btnExportOrg" style="margin-top:8px;padding:6px 18px;background:linear-gradient(135deg,#cf5b5b,#a33);border:1px solid rgba(207,91,91,.4);border-radius:5px;color:#fff;font-size:.68rem;letter-spacing:.08em;cursor:pointer;">&#128196; Exportar PDF</button>
     </div>
     <div id="orgDesfile"></div>
   </div>
@@ -1558,7 +1560,7 @@ function buildOrganigrama() {
     var num = bando === 'mora' ? (d.fmn||0) : (d.fcn||0);
     var cls = bando === 'mora' ? 'mora' : 'cristiana';
     var lbl = bando === 'mora' ? 'Fila Mora' : 'Fila Cristiana';
-    var str = num > 0 ? lbl + ': ' + num : lbl + ': NO ASISTE';
+    var str = lbl + ': ' + num;
     return '<div class="org-pob ' + cls + '">'
       + '<span class="org-pob-name">' + p.n + '</span>'
       + '<span class="org-pob-fila">' + str + '</span>'
@@ -1636,6 +1638,264 @@ function buildOrganigrama() {
 }
 
 
+
+// ═══════════════════════════════════════════════
+// EXPORT PDF - BANDAS Y ORGANIGRAMA
+// ═══════════════════════════════════════════════
+
+function exportBandasPDF() {
+  var bandas = BANDAS || {};
+  var bids   = Object.keys(bandas);
+
+  if (!bids.length) { alert('No hay bandas registradas.'); return; }
+
+  // Sort by bando then name
+  bids.sort(function(a, b) {
+    var ba = bandas[a], bb = bandas[b];
+    if (ba.bando !== bb.bando) return ba.bando === 'cristiana' ? -1 : 1;
+    return (ba.nombre||'').localeCompare(bb.nombre||'', 'es');
+  });
+
+  var totalMora = 0, totalCrist = 0, totalComp = 0;
+  var rows = '';
+  for (var i = 0; i < bids.length; i++) {
+    var b = bandas[bids[i]];
+    var total = 0;
+    var pobsList = '';
+    if (b.poblaciones && b.poblaciones.length) {
+      for (var p = 0; p < b.poblaciones.length; p++) {
+        var pd = getDB(b.poblaciones[p]);
+        total += b.bando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+        pobsList += b.poblaciones[p] + (p < b.poblaciones.length-1 ? ', ' : '');
+      }
+    }
+    var bcolor = b.bando === 'mora' ? '#1a4a6b' : '#6b3a00';
+    var blabel = b.bando === 'mora' ? 'MORO' : 'CRISTIANO';
+    var bg     = b.bando === 'mora' ? '#e8f4fd' : '#fdf5e8';
+    if (b.bando === 'mora') totalMora++; else totalCrist++;
+    totalComp += (b.componentes||0);
+    rows += '<tr style="background:' + bg + '">'
+      + '<td style="font-weight:700;font-size:10pt">' + (b.nombre||'-') + '</td>'
+      + '<td style="text-align:center"><span style="background:' + bcolor + ';color:#fff;padding:2px 8px;border-radius:3px;font-size:8pt;font-weight:700">' + blabel + '</span></td>'
+      + '<td>' + (b.origen||'-') + '</td>'
+      + '<td style="text-align:center;font-weight:700">' + (b.componentes||0) + '</td>'
+      + '<td style="text-align:center;font-weight:700;color:#2d7a50">' + total + '</td>'
+      + '<td style="font-size:8pt">' + (pobsList||'-') + '</td>'
+      + '</tr>';
+  }
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    + '<title>Bandas Asistentes - Convencion</title>'
+    + '<style>'
+    + 'body{font-family:Arial,sans-serif;margin:15mm;color:#222;}'
+    + 'h1{font-size:16pt;color:#8b1a1a;border-bottom:3px solid #8b1a1a;padding-bottom:6px;margin-bottom:4px;}'
+    + 'h2{font-size:10pt;color:#555;margin-bottom:14px;}'
+    + '.stats{display:flex;gap:20px;margin-bottom:16px;}'
+    + '.stat{background:#f5f0e8;border-left:4px solid #8b1a1a;padding:6px 14px;border-radius:3px;}'
+    + '.stat b{display:block;font-size:16pt;color:#8b1a1a;}'
+    + '.stat span{font-size:8pt;color:#666;text-transform:uppercase;letter-spacing:.05em;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:9pt;}'
+    + 'th{background:#8b1a1a;color:#c9a84c;padding:8px 6px;text-align:left;font-size:9pt;letter-spacing:.05em;}'
+    + 'td{padding:7px 6px;border-bottom:1px solid #ddd;vertical-align:top;}'
+    + 'tfoot td{background:#f5f0e8;font-weight:700;border-top:2px solid #8b1a1a;}'
+    + '@media print{body{margin:10mm;}}'
+    + '</style></head><body>'
+    + '<h1>Bandas Asistentes al Desfile</h1>'
+    + '<h2>Convencion de Moros y Cristianos &mdash; Relacion de Bandas</h2>'
+    + '<div class="stats">'
+    + '<div class="stat"><b>' + bids.length + '</b><span>Total Bandas</span></div>'
+    + '<div class="stat"><b>' + totalCrist + '</b><span>Bando Cristiano</span></div>'
+    + '<div class="stat"><b>' + totalMora + '</b><span>Bando Moro</span></div>'
+    + '<div class="stat"><b>' + totalComp + '</b><span>Componentes Totales</span></div>'
+    + '</div>'
+    + '<table>'
+    + '<thead><tr><th>NOMBRE BANDA</th><th>BANDO</th><th>ORIGEN</th><th>COMP.</th><th>ACOMP.</th><th>POBLACIONES QUE ACOMPANA</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody>'
+    + '</table>'
+    + '<p style="margin-top:20px;font-size:7pt;color:#aaa;text-align:right">Generado: ' + new Date().toLocaleDateString('es-ES') + '</p>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank', 'width=1000,height=700');
+  if (w) { w.document.write(html); w.document.close(); setTimeout(function(){ w.print(); }, 600); }
+}
+
+function exportOrgPDF() {
+  // Get attending populations
+  var attending = [];
+  for (var i = 0; i < POBS.length; i++) {
+    var d = getDB(POBS[i].n);
+    if (d && d.status === 'asiste') attending.push(POBS[i]);
+  }
+  attending.sort(function(a, b) { return a.n.localeCompare(b.n, 'es'); });
+
+  if (!attending.length) { alert('No hay poblaciones con estado ASISTE.'); return; }
+
+  var bandas  = BANDAS || {};
+  var bids    = Object.keys(bandas);
+  var mLookup = {}, cLookup = {};
+  for (var k = 0; k < bids.length; k++) {
+    var b = bandas[bids[k]];
+    if (!b || !b.poblaciones) continue;
+    for (var m = 0; m < b.poblaciones.length; m++) {
+      if (b.bando === 'mora')      mLookup[b.poblaciones[m]] = b;
+      if (b.bando === 'cristiana') cLookup[b.poblaciones[m]] = b;
+    }
+  }
+
+  function getTotal(banda, bando) {
+    var t = 0;
+    if (!banda || !banda.poblaciones) return t;
+    for (var p = 0; p < banda.poblaciones.length; p++) {
+      var pd = getDB(banda.poblaciones[p]);
+      t += bando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+    }
+    return t;
+  }
+
+  function buildBloqueHTML(bando, startNum) {
+    var lookup  = bando === 'mora' ? mLookup : cLookup;
+    var used    = {};
+    var color   = bando === 'mora' ? '#1a4a6b' : '#6b3a00';
+    var bgPob   = bando === 'mora' ? '#e8f4fd' : '#fdf5e8';
+    var bgBanda = bando === 'mora' ? '#c8e6f7' : '#f7e0c8';
+    var html    = '';
+    var num     = startNum;
+
+    for (var i = 0; i < attending.length; i += 4) {
+      var group = [attending[i], attending[i+1]||null, attending[i+2]||null, attending[i+3]||null];
+
+      // 2 before
+      for (var j = 0; j < 2; j++) {
+        if (!group[j]) continue;
+        var d = getDB(group[j].n);
+        var filaNum = bando === 'mora' ? (d.fmn||0) : (d.fcn||0);
+        html += '<tr style="background:' + bgPob + '">'
+          + '<td style="padding:5px 8px;font-weight:600">' + group[j].n + '</td>'
+          + '<td style="padding:5px 8px;text-align:center">' + filaNum + '</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '</tr>';
+      }
+
+      // Banda
+      var banda = null;
+      for (var x = 0; x < group.length; x++) {
+        if (group[x] && lookup[group[x].n] && !used[lookup[group[x].n].nombre]) {
+          banda = lookup[group[x].n]; break;
+        }
+      }
+      if (banda) {
+        used[banda.nombre] = true;
+        var total = getTotal(banda, bando);
+        html += '<tr style="background:' + bgBanda + ';font-weight:700">'
+          + '<td style="padding:6px 8px;color:' + color + '">&#127929; ' + banda.nombre + '</td>'
+          + '<td style="padding:6px 8px;text-align:center;color:' + color + '">' + total + '</td>'
+          + '<td style="padding:6px 8px;text-align:center;color:#555">' + (banda.componentes||0) + '</td>'
+          + '<td style="padding:6px 8px;text-align:center;font-size:8pt;color:#555">' + (banda.origen||'-') + '</td>'
+          + '</tr>';
+      } else {
+        html += '<tr style="background:#f0f0f0">'
+          + '<td colspan="4" style="padding:5px 8px;color:#aaa;font-style:italic;text-align:center">&#127929; Musica ' + num + ' — Sin banda asignada</td>'
+          + '</tr>';
+      }
+      num++;
+
+      // 2 after
+      for (var j = 2; j < 4; j++) {
+        if (!group[j]) continue;
+        var d2 = getDB(group[j].n);
+        var filaNum2 = bando === 'mora' ? (d2.fmn||0) : (d2.fcn||0);
+        html += '<tr style="background:' + bgPob + '">'
+          + '<td style="padding:5px 8px;font-weight:600">' + group[j].n + '</td>'
+          + '<td style="padding:5px 8px;text-align:center">' + filaNum2 + '</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '</tr>';
+      }
+
+      // Separator row
+      if (i + 4 < attending.length) {
+        html += '<tr><td colspan="4" style="padding:3px 0;background:#fff;border-bottom:2px solid #c9a84c"></td></tr>';
+      }
+    }
+    return html;
+  }
+
+  // Get fijos
+  function getFijosHTML(pos) {
+    var html = '';
+    var items = getFijosByPos(pos);
+    for (var i = 0; i < items.length; i++) {
+      html += '<tr style="background:#fff8e8"><td colspan="4" style="padding:5px 8px;color:#8b5a00;font-style:italic">' + items[i].txt + '</td></tr>';
+    }
+    return html;
+  }
+
+  function bloqueHeader(txt, color, bg) {
+    return '<tr><td colspan="4" style="background:' + bg + ';color:' + color + ';font-weight:700;font-size:11pt;padding:8px;letter-spacing:.05em;text-align:center">' + txt + '</td></tr>';
+  }
+
+  var totalAsiste = attending.length;
+  var totalFilaC  = 0, totalFilaM = 0;
+  for (var i = 0; i < attending.length; i++) {
+    var d = getDB(attending[i].n);
+    totalFilaC += (d.fcn||0);
+    totalFilaM += (d.fmn||0);
+  }
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    + '<title>Organigrama del Desfile</title>'
+    + '<style>'
+    + 'body{font-family:Arial,sans-serif;margin:10mm;color:#222;font-size:9pt;}'
+    + 'h1{font-size:14pt;color:#8b1a1a;border-bottom:3px solid #8b1a1a;padding-bottom:5px;margin-bottom:4px;}'
+    + 'h2{font-size:9pt;color:#555;margin-bottom:10px;}'
+    + '.stats{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;}'
+    + '.stat{background:#f5f0e8;border-left:3px solid #8b1a1a;padding:4px 10px;border-radius:3px;}'
+    + '.stat b{display:block;font-size:13pt;color:#8b1a1a;}'
+    + '.stat span{font-size:7pt;color:#666;text-transform:uppercase;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:8.5pt;page-break-inside:auto;}'
+    + 'tr{page-break-inside:avoid;}'
+    + 'th{background:#8b1a1a;color:#c9a84c;padding:6px 8px;text-align:left;}'
+    + 'td{border-bottom:1px solid #eee;}'
+    + '@media print{body{margin:8mm;}h1{font-size:12pt;}}'
+    + '</style></head><body>'
+    + '<h1>Organigrama del Desfile &mdash; Convencion Moros y Cristianos</h1>'
+    + '<h2>Poblaciones ordenadas alfabeticamente &bull; Bandas segun asignacion</h2>'
+    + '<div class="stats">'
+    + '<div class="stat"><b>' + totalAsiste + '</b><span>Poblaciones Asisten</span></div>'
+    + '<div class="stat"><b>' + totalFilaC + '</b><span>Total Fila Cristiana</span></div>'
+    + '<div class="stat"><b>' + totalFilaM + '</b><span>Total Fila Mora</span></div>'
+    + '<div class="stat"><b>' + (totalFilaC + totalFilaM) + '</b><span>Total Desfilantes</span></div>'
+    + '</div>'
+    + '<table>'
+    + '<thead><tr><th>POBLACION / BANDA</th><th style="text-align:center;width:60px">FILA</th><th style="text-align:center;width:60px">COMP.</th><th style="text-align:center;width:80px">ORIGEN</th></tr></thead>'
+    + '<tbody>'
+    // APERTURA
+    + bloqueHeader('APERTURA', '#8b5a00', '#fff3cd')
+    + getFijosHTML('apertura')
+    // BLOQUE CRISTIANO
+    + bloqueHeader('BLOQUE CRISTIANO', '#fff', '#8b5a00')
+    + '<tr style="background:#fdf5e8"><td colspan="4" style="padding:4px 8px;font-style:italic;color:#8b5a00">Cabo Batidor Cristiano (Caballo)</td></tr>'
+    + buildBloqueHTML('cristiana', 1)
+    // BLOQUE CENTRAL
+    + bloqueHeader('BLOQUE CENTRAL', '#fff', '#8b1a1a')
+    + getFijosHTML('central')
+    // BLOQUE MORO
+    + bloqueHeader('BLOQUE MORO', '#fff', '#1a4a6b')
+    + '<tr style="background:#e8f4fd"><td colspan="4" style="padding:4px 8px;font-style:italic;color:#1a4a6b">Cabo Batidor Moro (Caballo)</td></tr>'
+    + buildBloqueHTML('mora', 15)
+    // FINAL
+    + bloqueHeader('FINAL', '#2d5a2d', '#e8f5e8')
+    + getFijosHTML('final')
+    + '</tbody></table>'
+    + '<p style="margin-top:14px;font-size:7pt;color:#aaa;text-align:right">Generado: ' + new Date().toLocaleDateString('es-ES') + '</p>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank', 'width=1000,height=700');
+  if (w) { w.document.write(html); w.document.close(); setTimeout(function(){ w.print(); }, 600); }
+}
+
+
 // ═══════════════════════════════════════════════
 // EVENTOS - todo por delegacion en document
 // ═══════════════════════════════════════════════
@@ -1709,6 +1969,8 @@ document.addEventListener('click', function(e) {
   if (t.id === 'mfijoSave')   { saveFijo(); return; }
   if (t.id === 'mfijoCancel' || t.id === 'mfijoOverlay') { closeFijoModal(); return; }
 
+  if (t.id === 'btnExportBandas') { exportBandasPDF(); return; }
+  if (t.id === 'btnExportOrg')    { exportOrgPDF(); return; }
   if (t.id === 'btnAddBanda')     { openBandaModal(null); return; }
   if (t.id === 'mbandaClose')     { closeBandaModal(); return; }
   if (t.id === 'mbandaOverlay')   { closeBandaModal(); return; }
