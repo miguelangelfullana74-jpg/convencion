@@ -731,7 +731,6 @@ header p  { font-size:.85rem; color:rgba(245,237,224,.5); letter-spacing:.15em; 
     <div class="org-header">
       <div class="org-title">Organigrama del Desfile</div>
       <div class="org-subtitle">Solo poblaciones con estado ASISTE, ordenadas alfabeticamente.</div>
-      <button id="btnActualizarOrg" style="margin-top:8px;padding:6px 18px;background:transparent;border:1px solid rgba(201,168,76,.4);border-radius:5px;color:var(--oro);font-size:.68rem;letter-spacing:.08em;cursor:pointer;">&#8635; ACTUALIZAR</button>
     </div>
     <div id="orgDesfile"></div>
   </div>
@@ -900,8 +899,9 @@ function startApp() {
     DB = snap.val() || {};
     renderGrid(currentFilter());
     updateStats();
+    // Always rebuild organigrama if it's visible
     var orgTab = document.getElementById("tab-organigrama");
-    if (orgTab && orgTab.classList.contains("active")) setTimeout(function(){ buildOrganigrama(); }, 50);
+    if (orgTab && orgTab.classList.contains("active")) buildOrganigrama();
   });
 
   // Bandas listener
@@ -1651,19 +1651,7 @@ document.addEventListener('click', function(e) {
     var sec = el('tab-'+tab);
     if (sec) sec.classList.add('active');
     if (tab === 'bandas')      { renderBandas(); updateBandasStats(); }
-    if (tab === 'organigrama') {
-      // Wait for Firebase data - retry a few times if DB is empty
-      var attempts = 0;
-      function tryBuild() {
-        attempts++;
-        if (Object.keys(DB).length > 0 || attempts > 20) {
-          buildOrganigrama();
-        } else {
-          setTimeout(tryBuild, 200);
-        }
-      }
-      tryBuild();
-    }
+    if (tab === 'organigrama') { buildOrganigrama(); }
     return;
   }
 
@@ -1721,7 +1709,6 @@ document.addEventListener('click', function(e) {
   if (t.id === 'mfijoSave')   { saveFijo(); return; }
   if (t.id === 'mfijoCancel' || t.id === 'mfijoOverlay') { closeFijoModal(); return; }
 
-  if (t.id === 'btnActualizarOrg') { buildOrganigrama(); return; }
   if (t.id === 'btnAddBanda')     { openBandaModal(null); return; }
   if (t.id === 'mbandaClose')     { closeBandaModal(); return; }
   if (t.id === 'mbandaOverlay')   { closeBandaModal(); return; }
