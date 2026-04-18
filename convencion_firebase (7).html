@@ -1985,12 +1985,17 @@ document.addEventListener('click', function(e) {
   if (bandaCard) { openBandaModal(bandaCard.getAttribute('data-banda-id')); return; }
 });
 
-// Search
+// Search + direct export button listeners
 document.addEventListener('DOMContentLoaded', function() {
   var s = el('srch');
   if (s) s.addEventListener('input', function() {
     renderGrid(currentFilter());
   });
+  // Direct listeners for export buttons (more reliable than delegation)
+  var bExp = document.getElementById('btnExportBandas');
+  if (bExp) bExp.addEventListener('click', function(e) { e.stopPropagation(); exportBandasPDF(); });
+  var oExp = document.getElementById('btnExportOrg');
+  if (oExp) oExp.addEventListener('click', function(e) { e.stopPropagation(); exportOrgPDF(); });
 });
 
 </script>
