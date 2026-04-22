@@ -1,0 +1,2095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convención Moros y Cristianos</title>
+<style>
+:root {
+  --oro: #c9a84c;
+  --rojo: #8b1a1a;
+  --rojo2: #5a0f0f;
+  --oscuro: #0a0a0f;
+  --crema: #f5ede0;
+  --verde: #4caf82;
+  --azul: #7aadcf;
+  --rojovivo: #cf5b5b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: Georgia, serif;
+  background: var(--oscuro);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(139,26,26,.15) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 20%, rgba(26,58,107,.15) 0%, transparent 50%);
+  min-height: 100vh;
+  color: var(--crema);
+}
+
+/* HEADER */
+header { text-align:center; padding:28px 20px 18px; background:linear-gradient(180deg,rgba(139,26,26,.3),transparent); border-bottom:1px solid rgba(201,168,76,.3); position:relative; }
+header::before { content:'⚔'; position:absolute; left:22px; top:50%; transform:translateY(-50%); font-size:1.8rem; opacity:.22; color:var(--oro); }
+header::after  { content:'⚔'; position:absolute; right:22px; top:50%; transform:translateY(-50%) scaleX(-1); font-size:1.8rem; opacity:.22; color:var(--oro); }
+header h1 { font-size:clamp(1.1rem,3.5vw,2.2rem); font-weight:900; color:var(--oro); letter-spacing:.1em; text-shadow:0 0 30px rgba(201,168,76,.4); margin-bottom:3px; }
+header p  { font-size:.85rem; color:rgba(245,237,224,.5); letter-spacing:.15em; font-style:italic; }
+.orn { color:var(--oro); opacity:.4; font-size:.8rem; letter-spacing:.5em; margin:4px 0; }
+
+/* STATS */
+.stats-wrap { background:rgba(0,0,0,.5); border-bottom:1px solid rgba(201,168,76,.15); padding:11px 14px; }
+.stats-row  { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:7px; }
+.si { text-align:center; }
+.sn { font-size:1.35rem; font-weight:700; line-height:1; }
+.sl { font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; opacity:.55; margin-top:2px; }
+.sa .sn { color:var(--verde); }
+.sno .sn{ color:var(--rojovivo); }
+.sf .sn { color:var(--azul); }
+.sp .sn { color:var(--oro); }
+.sc .sn { color:#e09070; }
+.areas-row { display:flex; justify-content:center; gap:7px; flex-wrap:wrap; }
+.abadge { font-size:.6rem; padding:3px 9px; border:1px solid rgba(201,168,76,.3); border-radius:20px; color:var(--oro); background:rgba(201,168,76,.07); white-space:nowrap; }
+
+/* EXPORT */
+.exp-row { display:flex; justify-content:center; gap:9px; padding:9px 14px 2px; flex-wrap:wrap; }
+.bexp { padding:6px 16px; border-radius:5px; border:1px solid; font-size:.64rem; font-weight:700; letter-spacing:.08em; cursor:pointer; transition:all .2s; background:transparent; }
+.bexp-xl { border-color:var(--verde); color:var(--verde); }
+.bexp-xl:hover { background:rgba(76,175,130,.15); }
+.bexp-pd { border-color:var(--rojovivo); color:var(--rojovivo); }
+.bexp-pd:hover { background:rgba(207,91,91,.15); }
+
+/* SEARCH */
+.srch-wrap { padding:13px 16px 5px; max-width:500px; margin:0 auto; }
+.srch-inp  { width:100%; padding:9px 13px; background:rgba(255,255,255,.05); border:1px solid rgba(201,168,76,.3); border-radius:4px; color:var(--crema); font-family:inherit; font-size:.95rem; outline:none; transition:border-color .3s; }
+.srch-inp::placeholder { color:rgba(245,237,224,.28); }
+.srch-inp:focus { border-color:var(--oro); }
+
+/* GRID */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:9px; padding:6px 14px 32px; max-width:1360px; margin:0 auto; min-height:100px; }
+.card { background:rgba(255,255,255,.04); border:1px solid rgba(201,168,76,.2); border-radius:6px; padding:12px; cursor:pointer; transition:all .2s; position:relative; overflow:hidden; }
+.card:hover { background:rgba(201,168,76,.09); border-color:rgba(201,168,76,.5); transform:translateY(-2px); box-shadow:0 7px 20px rgba(0,0,0,.4); }
+.card.casiste     { border-left:3px solid var(--verde); }
+.card.cnoasiste   { border-left:3px solid var(--rojovivo); }
+.card.cfaltadatos { border-left:3px solid var(--azul); }
+.cname  { font-size:.8rem; font-weight:700; color:var(--crema); margin-bottom:3px; line-height:1.3; padding-right:54px; }
+.carea  { font-size:.64rem; color:var(--oro); letter-spacing:.1em; text-transform:uppercase; opacity:.8; }
+.cfilas { font-size:.59rem; color:rgba(245,237,224,.48); margin-top:3px; }
+.cbadge { position:absolute; top:7px; right:7px; font-size:.56rem; padding:2px 5px; border-radius:3px; font-weight:700; text-transform:uppercase; }
+.cbadge.ca { background:rgba(76,175,130,.2);  color:var(--verde); }
+.cbadge.cn { background:rgba(207,91,91,.2);   color:var(--rojovivo); }
+.cbadge.cf { background:rgba(122,173,207,.2); color:var(--azul); }
+.nores { text-align:center; padding:50px 20px; color:rgba(245,237,224,.28); font-size:.9rem; letter-spacing:.1em; grid-column:1/-1; }
+
+/* OVERLAY */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:1000; overflow-y:auto; backdrop-filter:blur(3px); padding:12px; }
+.overlay.open { display:flex; align-items:flex-start; justify-content:center; }
+
+/* MODAL */
+.modal { background:linear-gradient(135deg,#12121a,#1a1020); border:1px solid rgba(201,168,76,.4); border-radius:10px; width:100%; max-width:610px; margin:auto; box-shadow:0 0 55px rgba(0,0,0,.85); animation:mIn .25s ease; }
+@keyframes mIn { from{opacity:0;transform:translateY(-14px) scale(.97);}to{opacity:1;transform:none;} }
+.mhd { padding:18px 22px 14px; border-bottom:1px solid rgba(201,168,76,.2); background:linear-gradient(90deg,rgba(139,26,26,.22),rgba(26,58,107,.22)); position:relative; }
+.mtitle { font-size:1.2rem; font-weight:700; color:var(--oro); margin-bottom:2px; }
+.msub   { font-size:.76rem; color:rgba(245,237,224,.5); letter-spacing:.1em; text-transform:uppercase; }
+.mclose { position:absolute; top:12px; right:12px; background:none; border:1px solid rgba(201,168,76,.35); color:var(--oro); width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:.82rem; transition:background .2s; }
+.mclose:hover { background:rgba(201,168,76,.15); }
+.mbody { padding:18px 22px 20px; }
+
+/* ATTENDANCE BUTTONS */
+.att-wrap { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:18px; }
+@media(max-width:440px){ .att-wrap { grid-template-columns:1fr; } }
+.att-btn { padding:10px 6px; border:2px solid; border-radius:7px; cursor:pointer; font-size:.62rem; font-weight:700; text-align:center; text-transform:uppercase; letter-spacing:.04em; transition:all .22s; background:transparent; line-height:1.4; }
+.att-btn.abverde { border-color:var(--verde); color:var(--verde); }
+.att-btn.abverde.sel { background:rgba(76,175,130,.18); box-shadow:0 0 14px rgba(76,175,130,.3); }
+.att-btn.abrojo  { border-color:var(--rojovivo); color:var(--rojovivo); }
+.att-btn.abrojo.sel  { background:rgba(207,91,91,.18); box-shadow:0 0 14px rgba(207,91,91,.3); }
+.att-btn.abazul  { border-color:var(--azul); color:var(--azul); }
+.att-btn.abazul.sel  { background:rgba(122,173,207,.18); box-shadow:0 0 14px rgba(122,173,207,.3); }
+
+/* FORM */
+.form-body { display:none; }
+.form-body.show { display:block; animation:fIn .25s ease; }
+@keyframes fIn { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;} }
+.sep { display:flex; align-items:center; gap:8px; margin:14px 0 10px; }
+.sep::before,.sep::after { content:''; flex:1; height:1px; background:rgba(201,168,76,.2); }
+.sep span { font-size:.62rem; color:var(--oro); letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
+.fg { margin-bottom:10px; }
+.fl { display:block; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(245,237,224,.55); margin-bottom:4px; }
+.fi  { width:100%; padding:8px 11px; background:rgba(255,255,255,.05); border:1px solid rgba(201,168,76,.22); border-radius:5px; color:var(--crema); font-family:inherit; font-size:.93rem; outline:none; transition:border-color .2s; }
+.fi:focus { border-color:var(--oro); background:rgba(201,168,76,.04); }
+.fta { width:100%; padding:8px 11px; background:rgba(255,255,255,.05); border:1px solid rgba(201,168,76,.22); border-radius:5px; color:var(--crema); font-family:inherit; font-size:.88rem; outline:none; resize:vertical; min-height:60px; transition:border-color .2s; }
+.fta:focus { border-color:var(--oro); }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+@media(max-width:400px){ .two { grid-template-columns:1fr; } }
+
+/* Tabs musica */
+.tabs { display:flex; gap:6px; margin:7px 0 8px; flex-wrap:wrap; }
+.tbtn { padding:4px 11px; border:1px solid rgba(201,168,76,.28); border-radius:4px; background:transparent; color:rgba(245,237,224,.55); font-size:.59rem; letter-spacing:.07em; cursor:pointer; transition:all .2s; }
+.tbtn.on { background:rgba(201,168,76,.15); border-color:var(--oro); color:var(--oro); }
+.mus-sec { display:none; padding:10px; background:rgba(201,168,76,.05); border:1px solid rgba(201,168,76,.14); border-radius:5px; margin-bottom:10px; }
+.mus-sec.show { display:block; }
+.mus-opts { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+@media(max-width:390px){ .mus-opts { grid-template-columns:1fr; } }
+.mopt { padding:8px 5px; border:1px solid rgba(201,168,76,.28); border-radius:5px; background:transparent; color:rgba(245,237,224,.65); font-size:.59rem; text-align:center; cursor:pointer; transition:all .2s; line-height:1.4; }
+.mopt.on { background:rgba(201,168,76,.15); border-color:var(--oro); color:var(--oro); }
+
+/* Counter */
+.ctr  { display:flex; align-items:center; border:1px solid rgba(201,168,76,.22); border-radius:5px; overflow:hidden; }
+.cbtn { width:34px; height:36px; background:rgba(201,168,76,.1); border:none; color:var(--oro); font-size:1.1rem; cursor:pointer; flex-shrink:0; transition:background .2s; }
+.cbtn:hover { background:rgba(201,168,76,.22); }
+.cval { flex:1; text-align:center; background:rgba(255,255,255,.03); color:var(--crema); font-size:.93rem; border:none; outline:none; padding:5px; min-width:0; }
+.clim { font-size:.59rem; color:rgba(245,237,224,.35); margin-top:3px; text-align:center; }
+
+/* Pills */
+.pills { display:flex; gap:6px; flex-wrap:wrap; }
+.pill  { padding:5px 12px; border:1px solid rgba(201,168,76,.28); border-radius:20px; background:transparent; color:rgba(245,237,224,.6); font-size:.59rem; letter-spacing:.06em; cursor:pointer; transition:all .2s; }
+.pill.on { background:rgba(201,168,76,.18); border-color:var(--oro); color:var(--oro); }
+.otros-wrap { display:none; margin-top:7px; }
+.otros-wrap.show { display:block; }
+
+/* Save & Delete buttons */
+.btn-save { width:100%; margin-top:14px; padding:11px; background:linear-gradient(135deg,var(--rojo),var(--rojo2)); border:1px solid rgba(201,168,76,.4); border-radius:6px; color:var(--oro); font-size:.8rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; transition:all .22s; }
+.btn-save:hover { background:linear-gradient(135deg,#a82020,#6e1212); box-shadow:0 5px 17px rgba(139,26,26,.5); transform:translateY(-1px); }
+.btn-delete { width:100%; margin-top:7px; padding:9px; background:transparent; border:1px solid rgba(207,91,91,.35); border-radius:6px; color:rgba(207,91,91,.7); font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; transition:all .22s; }
+.btn-delete:hover { border-color:var(--rojovivo); color:var(--rojovivo); background:rgba(207,91,91,.08); }
+
+
+/* SYNC */
+.sync-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:5px 14px;background:rgba(0,0,0,.45);border-bottom:1px solid rgba(201,168,76,.1);font-size:.64rem;letter-spacing:.08em;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#888;flex-shrink:0;transition:background .3s;}
+.sync-dot.on{background:#4caf82;box-shadow:0 0 6px rgba(76,175,130,.6);}
+.sync-dot.saving{background:#c9a84c;animation:blink .5s infinite alternate;}
+.sync-dot.err{background:#cf5b5b;}
+@keyframes blink{from{opacity:1;}to{opacity:.3;}}
+.sync-txt{color:rgba(245,237,224,.5);}
+
+/* CONFIRM DIALOG */
+.confirm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:2000; align-items:center; justify-content:center; padding:20px; }
+.confirm-overlay.open { display:flex; }
+.confirm-box { background:linear-gradient(135deg,#12121a,#1a1020); border:1px solid rgba(201,168,76,.5); border-radius:10px; padding:28px 24px; max-width:360px; width:100%; text-align:center; animation:mIn .22s ease; box-shadow:0 0 50px rgba(0,0,0,.9); }
+.confirm-icon  { font-size:2.4rem; margin-bottom:11px; }
+.confirm-title { font-size:1.05rem; font-weight:700; color:var(--oro); margin-bottom:7px; }
+.confirm-msg   { font-size:.88rem; color:rgba(245,237,224,.62); line-height:1.5; margin-bottom:20px; }
+.confirm-btns  { display:flex; gap:10px; justify-content:center; }
+.confirm-btn   { padding:9px 22px; border-radius:6px; border:1px solid; font-size:.7rem; font-weight:700; letter-spacing:.09em; cursor:pointer; transition:all .2s; background:transparent; }
+.confirm-btn.cyes { border-color:var(--rojovivo); color:var(--rojovivo); }
+.confirm-btn.cyes:hover { background:rgba(207,91,91,.18); }
+.confirm-btn.cno  { border-color:var(--oro); color:var(--oro); }
+.confirm-btn.cno:hover  { background:rgba(201,168,76,.15); }
+
+/* TOAST */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:#1a2a1a; border:1px solid var(--verde); color:var(--verde); padding:9px 18px; border-radius:6px; font-size:.74rem; letter-spacing:.1em; transition:transform .3s; z-index:9999; pointer-events:none; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ============ MOBILE OPTIMIZATIONS ============ */
+@media (max-width: 600px) {
+  header { padding: 20px 14px 14px; }
+  header::before, header::after { display:none; }
+  header h1 { font-size: 1.1rem; letter-spacing:.06em; }
+  header p  { font-size: .75rem; letter-spacing:.1em; }
+  .orn { font-size:.7rem; letter-spacing:.3em; }
+
+  .stats-wrap { padding: 10px 10px; }
+  .stats-row  { gap: 10px; margin-bottom: 6px; }
+  .sn { font-size: 1.2rem; }
+  .sl { font-size: .55rem; }
+  .abadge { font-size:.55rem; padding:2px 7px; }
+
+  .exp-row { gap:7px; padding:8px 10px 2px; }
+  .bexp { padding:7px 14px; font-size:.65rem; }
+
+  .srch-wrap { padding:10px 10px 4px; }
+  .srch-inp  { padding:10px 12px; font-size:1rem; }
+
+  .grid { grid-template-columns: 1fr 1fr; gap:7px; padding:5px 10px 28px; }
+  .card { padding:10px; }
+  .cname { font-size:.75rem; padding-right:46px; }
+  .carea { font-size:.6rem; }
+  .cfilas { font-size:.56rem; }
+  .cbadge { font-size:.52rem; padding:2px 4px; top:5px; right:5px; }
+
+  /* MODAL full screen on mobile */
+  .overlay { padding: 0; align-items: flex-end; }
+  .modal { border-radius: 14px 14px 0 0; max-width: 100%; margin: 0; max-height: 92vh; overflow-y: auto; }
+  .mhd { padding: 14px 16px 11px; }
+  .mtitle { font-size: 1.05rem; }
+  .msub   { font-size: .7rem; }
+  .mclose { width:30px; height:30px; top:10px; right:10px; }
+  .mbody { padding: 14px 16px 24px; }
+
+  .att-wrap { grid-template-columns: 1fr 1fr 1fr; gap:6px; margin-bottom:14px; }
+  .att-btn  { padding:9px 4px; font-size:.58rem; }
+
+  .sep span { font-size:.58rem; letter-spacing:.1em; }
+  .fg { margin-bottom:9px; }
+  .fl { font-size:.62rem; }
+  .fi  { padding:9px 10px; font-size:1rem; }
+  .fta { font-size:.9rem; min-height:55px; }
+
+  .tabs { gap:5px; margin:6px 0 7px; }
+  .tbtn { padding:5px 10px; font-size:.6rem; }
+
+  .mus-opts { grid-template-columns: repeat(3,1fr); gap:5px; }
+  .mopt { padding:8px 4px; font-size:.58rem; }
+
+  .cbtn { width:40px; height:40px; font-size:1.2rem; }
+  .cval { font-size:1rem; padding:7px; }
+
+  .pills { gap:5px; }
+  .pill  { padding:6px 12px; font-size:.6rem; }
+
+  .btn-save   { padding:13px; font-size:.82rem; margin-top:12px; }
+  .btn-delete { padding:10px; font-size:.68rem; margin-top:6px; }
+
+  .confirm-box { padding:22px 18px; }
+  .confirm-title { font-size:.98rem; }
+  .confirm-msg   { font-size:.82rem; }
+  .confirm-btn   { padding:10px 18px; font-size:.68rem; }
+}
+
+@media (max-width: 360px) {
+  .grid { grid-template-columns: 1fr; }
+  .att-wrap { grid-template-columns: 1fr; }
+  .two { grid-template-columns: 1fr; }
+}
+/* ============ END MOBILE ============ */
+
+/* TABS NAVEGACION */
+.nav-tabs { display:flex; gap:0; border-bottom:2px solid rgba(201,168,76,.3); padding:0 16px; background:rgba(0,0,0,.3); }
+.nav-tab  { padding:11px 22px; font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; border:none; background:transparent; color:rgba(245,237,224,.45); border-bottom:3px solid transparent; margin-bottom:-2px; transition:all .2s; }
+.nav-tab.active { color:var(--oro); border-bottom-color:var(--oro); }
+.nav-tab:hover  { color:var(--crema); }
+.tab-section { display:none; }
+.tab-section.active { display:block; }
+
+/* BANDAS */
+.bandas-wrap { max-width:1360px; margin:0 auto; padding:14px 16px 40px; }
+.bandas-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px; }
+.bandas-title  { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--oro); letter-spacing:.1em; }
+.bandas-stats  { display:flex; gap:14px; flex-wrap:wrap; }
+.bstat { text-align:center; }
+.bstat-n { font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700; color:var(--oro); line-height:1; }
+.bstat-l { font-size:.6rem; text-transform:uppercase; letter-spacing:.08em; opacity:.55; margin-top:2px; }
+.btn-add-banda { padding:9px 20px; background:linear-gradient(135deg,var(--rojo),var(--rojo2)); border:1px solid rgba(201,168,76,.4); border-radius:6px; color:var(--oro); font-family:'Cinzel',serif; font-size:.72rem; font-weight:700; letter-spacing:.1em; cursor:pointer; transition:all .2s; }
+.btn-add-banda:hover { box-shadow:0 4px 14px rgba(139,26,26,.5); transform:translateY(-1px); }
+
+.bandas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:10px; }
+.banda-card  { background:rgba(255,255,255,.04); border:1px solid rgba(201,168,76,.2); border-radius:8px; padding:14px; cursor:pointer; transition:all .2s; position:relative; }
+.banda-card:hover { background:rgba(201,168,76,.08); border-color:rgba(201,168,76,.45); transform:translateY(-2px); box-shadow:0 7px 20px rgba(0,0,0,.4); }
+.banda-card.mora    { border-left:3px solid #7aadcf; }
+.banda-card.cristiana { border-left:3px solid var(--oro); }
+.banda-nombre  { font-family:'Cinzel',serif; font-size:.9rem; font-weight:700; color:var(--crema); margin-bottom:4px; padding-right:60px; }
+.banda-info    { font-size:.7rem; color:rgba(245,237,224,.6); margin-top:2px; }
+.banda-bando   { position:absolute; top:8px; right:8px; font-size:.58rem; padding:2px 6px; border-radius:3px; font-weight:700; text-transform:uppercase; }
+.banda-bando.mora     { background:rgba(122,173,207,.2); color:#7aadcf; }
+.banda-bando.cristiana{ background:rgba(201,168,76,.2);  color:var(--oro); }
+.banda-pobs    { margin-top:7px; display:flex; flex-wrap:wrap; gap:5px; }
+.banda-pob-tag { font-size:.6rem; padding:2px 8px; border:1px solid rgba(201,168,76,.25); border-radius:12px; color:rgba(245,237,224,.7); background:rgba(201,168,76,.06); }
+.bandas-empty  { text-align:center; padding:55px 20px; color:rgba(245,237,224,.28); font-family:'Cinzel',serif; font-size:.9rem; grid-column:1/-1; }
+
+/* MODAL BANDA */
+.mbanda-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:1000; overflow-y:auto; backdrop-filter:blur(3px); padding:12px; }
+.mbanda-overlay.open { display:flex; align-items:flex-start; justify-content:center; }
+.mbanda-overlay.open { display:flex; align-items:flex-start; justify-content:center; }
+.mbanda { background:linear-gradient(135deg,#12121a,#1a1020); border:1px solid rgba(201,168,76,.4); border-radius:10px; width:100%; max-width:580px; margin:auto; box-shadow:0 0 55px rgba(0,0,0,.85); animation:mIn .25s ease; }
+.mbanda-hd { padding:16px 22px 13px; border-bottom:1px solid rgba(201,168,76,.2); background:linear-gradient(90deg,rgba(139,26,26,.22),rgba(26,58,107,.22)); position:relative; }
+.mbanda-title { font-family:'Cinzel',serif; font-size:1.1rem; font-weight:700; color:var(--oro); }
+.mbanda-close { position:absolute; top:11px; right:12px; background:none; border:1px solid rgba(201,168,76,.35); color:var(--oro); width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:.82rem; transition:background .2s; }
+.mbanda-close:hover { background:rgba(201,168,76,.15); }
+.mbanda-body  { padding:18px 22px 22px; }
+
+/* pob checkboxes */
+.pob-check-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:6px; max-height:220px; overflow-y:auto; padding:4px; }
+.pob-check-item { display:flex; align-items:center; gap:7px; padding:6px 9px; border:1px solid rgba(201,168,76,.18); border-radius:5px; cursor:pointer; transition:background .15s; }
+.pob-check-item:hover { background:rgba(201,168,76,.07); }
+.pob-check-item input[type=checkbox] { accent-color:var(--oro); width:15px; height:15px; cursor:pointer; flex-shrink:0; }
+.pob-check-item label { font-size:.72rem; color:rgba(245,237,224,.75); cursor:pointer; line-height:1.3; }
+.pob-check-item.checked { background:rgba(201,168,76,.1); border-color:rgba(201,168,76,.4); }
+.pob-check-item.checked label { color:var(--crema); }
+
+
+/* ═══════════════════════════════════════════
+   MOBILE RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 600px) {
+
+  /* Header */
+  header { padding: 16px 12px 12px; }
+  header::before, header::after { display:none; }
+  header h1 { font-size: 1rem; letter-spacing:.04em; }
+  header p  { font-size: .72rem; }
+  .orn { display:none; }
+
+  /* Nav tabs */
+  .nav-tabs { padding: 0 8px; }
+  .nav-tab  { padding: 10px 14px; font-size: .65rem; }
+
+  /* Stats */
+  .stats-wrap { padding: 8px 10px; }
+  .stats-row  { gap: 10px; }
+  .sn { font-size: 1.15rem; }
+  .sl { font-size: .52rem; }
+  .abadge { font-size:.52rem; padding:2px 6px; }
+
+  /* Export */
+  .exp-row { gap:6px; padding:7px 10px 2px; }
+  .btn-exp { flex:1; padding:8px 4px; font-size:.62rem; }
+
+  /* Search */
+  .srch-wrap { padding:8px 10px 4px; }
+  .srch-inp  { padding:10px 12px; font-size:16px; }
+
+  /* Grid - single column list */
+  .grid { grid-template-columns:1fr; gap:6px; padding:5px 10px 30px; }
+  .card { padding:11px 12px; }
+  .cname { font-size:.82rem; padding-right:70px; }
+  .carea { font-size:.62rem; }
+  .cfilas { font-size:.58rem; }
+  .cbadge { font-size:.55rem; top:8px; right:8px; }
+
+  /* Sync bar */
+  .sync-bar { font-size:.6rem; padding:4px 10px; }
+  .sync-dot { width:7px; height:7px; }
+
+  /* Modal - bottom sheet */
+  .overlay { padding:0; align-items:flex-end; }
+  .modal {
+    border-radius: 16px 16px 0 0;
+    max-width: 100%;
+    margin: 0;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .mhd { padding:12px 16px 10px; }
+  .mtitle { font-size:1rem; }
+  .msub   { font-size:.68rem; }
+  .mclose { width:28px; height:28px; top:10px; right:10px; }
+  .mbody  { padding:12px 14px 28px; }
+
+  /* Attendance buttons - vertical on mobile */
+  .att-wrap { grid-template-columns:1fr; gap:7px; margin-bottom:14px; }
+  .att-btn  { padding:13px 10px; font-size:.75rem; }
+
+  /* Form */
+  .sep span { font-size:.58rem; }
+  .fg { margin-bottom:10px; }
+  .fl { font-size:.62rem; }
+  .fi  { padding:11px 12px; font-size:16px; }
+  .fta { font-size:15px; min-height:65px; }
+  .two { grid-template-columns:1fr; }
+
+  /* Tabs musica */
+  .tabs { gap:5px; }
+  .tbtn { flex:1; padding:9px 5px; font-size:.62rem; text-align:center; }
+  .mus-opts { grid-template-columns:repeat(3,1fr); }
+  .mopt { padding:9px 4px; font-size:.6rem; }
+
+  /* Counter buttons */
+  .cbtn { width:46px; height:44px; font-size:1.3rem; }
+  .cval { font-size:1.05rem; padding:8px; }
+
+  /* Pills */
+  .pill { padding:7px 13px; font-size:.62rem; }
+
+  /* Save/Delete buttons */
+  .btn-save   { padding:14px; font-size:.82rem; margin-top:12px; }
+  .btn-delete { padding:11px; font-size:.7rem; margin-top:6px; }
+
+  /* Bandas section */
+  .bandas-header { flex-direction:column; align-items:flex-start; gap:8px; }
+  .bandas-title  { font-size:.95rem; }
+  .bandas-stats  { gap:12px; }
+  .bstat-n { font-size:1.1rem; }
+  .btn-add-banda { width:100%; padding:11px; font-size:.72rem; }
+  .bandas-grid { grid-template-columns:1fr; }
+  .banda-card  { padding:11px 12px; }
+  .banda-nombre { font-size:.82rem; padding-right:90px; }
+  .banda-info   { font-size:.68rem; }
+
+  /* Banda modal - bottom sheet */
+  .mbanda-overlay { padding:0; align-items:flex-end; }
+  .mbanda {
+    border-radius: 16px 16px 0 0;
+    max-width: 100%;
+    margin: 0;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .mbanda-hd   { padding:12px 16px 10px; }
+  .mbanda-title{ font-size:.95rem; }
+  .mbanda-close{ width:28px; height:28px; top:10px; right:10px; }
+  .mbanda-body { padding:12px 14px 28px; }
+
+  /* Pob check list */
+  .pob-check-list { max-height:180px; grid-template-columns:1fr; }
+  .pob-check-item label { font-size:.75rem; }
+
+  /* Confirm dialog */
+  .confirm-box   { padding:22px 16px; }
+  .confirm-title { font-size:.95rem; }
+  .confirm-msg   { font-size:.8rem; }
+  .confirm-btn   { padding:11px 14px; font-size:.68rem; }
+}
+
+@media (max-width: 380px) {
+  .stats-row { gap:7px; }
+  .sn { font-size:1rem; }
+  .nav-tab { padding:9px 10px; font-size:.6rem; }
+}
+
+
+/* ═══════════════════════════════════════════
+   ORGANIGRAMA
+═══════════════════════════════════════════ */
+.org-wrap    { max-width:1360px; margin:0 auto; padding:16px 16px 50px; }
+.org-header  { text-align:center; margin-bottom:20px; }
+.org-title   { font-family:'Cinzel',serif; font-size:1.2rem; color:var(--oro); letter-spacing:.1em; margin-bottom:6px; }
+.org-subtitle{ font-size:.75rem; color:rgba(245,237,224,.45); }
+
+.org-bloque-header { font-family:'Cinzel',serif; font-size:.85rem; font-weight:700; letter-spacing:.12em; text-align:center; padding:12px 16px; border-radius:6px; margin:14px 0 6px; }
+.org-bloque-header.cristiana { background:rgba(201,168,76,.15); color:var(--oro);       border:1px solid rgba(201,168,76,.4); }
+.org-bloque-header.mora      { background:rgba(122,173,207,.15); color:#7aadcf;          border:1px solid rgba(122,173,207,.4); }
+.org-bloque-header.central   { background:rgba(139,26,26,.15);   color:var(--rojovivo);  border:1px solid rgba(139,26,26,.4); }
+.org-bloque-header.final     { background:rgba(76,175,130,.12);  color:var(--verde);     border:1px solid rgba(76,175,130,.3); }
+.org-bloque-header.apertura  { background:rgba(201,168,76,.12);   color:var(--oro);        border:1px solid rgba(201,168,76,.3); }
+
+/* Fixed elements */
+.org-fijo { background:rgba(201,168,76,.12); border:1px solid rgba(201,168,76,.35); border-radius:6px; padding:8px 14px; text-align:center; font-family:'Cinzel',serif; font-size:.72rem; color:var(--oro); letter-spacing:.08em; }
+
+/* Population rows */
+.org-pob { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:5px; padding:7px 14px; font-size:.78rem; color:var(--crema); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.org-pob.cristiana { border-left:3px solid var(--oro); }
+.org-pob.mora      { border-left:3px solid #7aadcf; }
+.org-pob-name  { font-weight:600; }
+.org-pob-fila  { font-size:.65rem; color:rgba(245,237,224,.45); }
+.org-pob-empty { background:rgba(255,255,255,.02); border:1px dashed rgba(255,255,255,.1); border-radius:5px; padding:7px 14px; font-size:.7rem; color:rgba(245,237,224,.25); font-style:italic; text-align:center; }
+
+/* Banda rows */
+.org-banda { border-radius:6px; padding:9px 14px; text-align:center; margin:2px 0; }
+.org-banda.cristiana { background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.3); }
+.org-banda.mora      { background:rgba(122,173,207,.1); border:1px solid rgba(122,173,207,.3); }
+.org-banda-name  { font-family:'Cinzel',serif; font-size:.75rem; font-weight:700; }
+.org-banda.cristiana .org-banda-name { color:var(--oro); }
+.org-banda.mora      .org-banda-name { color:#7aadcf; }
+.org-banda-info  { font-size:.63rem; color:rgba(245,237,224,.5); margin-top:2px; }
+.org-banda-pieza { font-size:.62rem; color:var(--oro); margin-top:2px; font-style:italic; }
+.org-banda-empty { background:rgba(255,255,255,.02); border:1px dashed rgba(255,255,255,.08); border-radius:6px; padding:8px 14px; text-align:center; font-size:.65rem; color:rgba(245,237,224,.2); font-style:italic; margin:2px 0; }
+
+/* Separator */
+.org-sep { height:2px; background:rgba(201,168,76,.25); margin:10px 0; border-radius:1px; }
+
+/* Bloque central */
+.org-bloque-central { grid-column:1/-1; background:rgba(139,26,26,.15); border:1px solid rgba(139,26,26,.4); border-radius:8px; padding:12px 16px; text-align:center; margin:8px 0; }
+.org-bloque-central-title { font-family:'Cinzel',serif; font-size:.85rem; color:var(--rojovivo); letter-spacing:.1em; margin-bottom:4px; }
+.org-bloque-central-items { font-size:.72rem; color:rgba(245,237,224,.55); line-height:1.8; }
+
+/* Stats bar */
+.org-stats { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+.org-stat   { text-align:center; padding:6px 14px; border-radius:5px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
+.org-stat-n { font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700; color:var(--oro); line-height:1; }
+.org-stat-l { font-size:.58rem; text-transform:uppercase; letter-spacing:.08em; opacity:.5; margin-top:2px; }
+
+@media(max-width:600px){
+  .org-pob { padding:6px 10px; font-size:.74rem; }
+  .org-banda { padding:7px 10px; }
+  .org-banda-name { font-size:.7rem; }
+}
+
+
+/* FIJOS EDITABLES */
+.org-fijo { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.org-fijo-txt  { flex:1; }
+.org-fijo-btns { display:flex; gap:4px; flex-shrink:0; }
+.org-fijo-btn  { padding:3px 8px; border-radius:4px; border:1px solid; font-size:.6rem; font-weight:700; cursor:pointer; background:transparent; letter-spacing:.05em; transition:all .2s; }
+.org-fijo-btn.edit { border-color:rgba(201,168,76,.4); color:var(--oro); }
+.org-fijo-btn.edit:hover { background:rgba(201,168,76,.15); }
+.org-fijo-btn.del  { border-color:rgba(207,91,91,.4); color:var(--rojovivo); }
+.org-fijo-btn.del:hover  { background:rgba(207,91,91,.12); }
+.org-add-fijo { width:100%; margin:4px 0; padding:6px; border:1px dashed rgba(201,168,76,.25); border-radius:5px; background:transparent; color:rgba(201,168,76,.5); font-size:.65rem; letter-spacing:.08em; cursor:pointer; transition:all .2s; text-align:center; }
+.org-add-fijo:hover { border-color:var(--oro); color:var(--oro); background:rgba(201,168,76,.06); }
+
+/* Modal fijo */
+.mfijo-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:1000; align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(3px); }
+.mfijo-overlay.open { display:flex; }
+.mfijo-box { background:linear-gradient(135deg,#12121a,#1a1020); border:1px solid rgba(201,168,76,.4); border-radius:10px; width:100%; max-width:480px; padding:24px; box-shadow:0 0 55px rgba(0,0,0,.85); animation:mIn .22s ease; }
+.mfijo-title { font-family:'Cinzel',serif; font-size:1rem; color:var(--oro); margin-bottom:14px; }
+.mfijo-box textarea { width:100%; padding:10px 12px; background:rgba(255,255,255,.06); border:1px solid rgba(201,168,76,.3); border-radius:6px; color:var(--crema); font-family:inherit; font-size:.95rem; resize:vertical; min-height:70px; outline:none; }
+.mfijo-box textarea:focus { border-color:var(--oro); }
+.mfijo-btns { display:flex; gap:8px; margin-top:14px; }
+.mfijo-save { flex:1; padding:11px; background:linear-gradient(135deg,var(--rojo),var(--rojo2)); border:1px solid rgba(201,168,76,.4); border-radius:6px; color:var(--oro); font-family:'Cinzel',serif; font-size:.75rem; font-weight:700; letter-spacing:.1em; cursor:pointer; }
+.mfijo-cancel { padding:11px 18px; background:transparent; border:1px solid rgba(255,255,255,.15); border-radius:6px; color:rgba(245,237,224,.5); font-size:.75rem; cursor:pointer; }
+
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="orn">✦ ✦ ✦</div>
+  <h1>Convención de Moros y Cristianos</h1>
+  <p>Control de Asistencia al Desfile</p>
+  <div class="orn">✦ ✦ ✦</div>
+</header>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" data-tab="poblaciones">&#9876; Poblaciones</button>
+  <button class="nav-tab"        data-tab="bandas">&#127929; Bandas Asistentes</button>
+  <button class="nav-tab"        data-tab="organigrama">&#9876; Organigrama del Desfile</button>
+</div>
+
+<div class="tab-section active" id="tab-poblaciones">
+<div class="stats-wrap">
+  <div class="stats-row">
+    <div class="si sa" ><div class="sn" id="cnt-a">0</div><div class="sl">Asisten</div></div>
+    <div class="si sno"><div class="sn" id="cnt-n">0</div><div class="sl">No Asisten</div></div>
+    <div class="si sf" ><div class="sn" id="cnt-f">0</div><div class="sl">Faltan Datos</div></div>
+    <div class="si sp" ><div class="sn" id="cnt-p">84</div><div class="sl">Pendientes</div></div>
+    <div class="si sc" ><div class="sn" id="cnt-c">0</div><div class="sl">Asist. Cena</div></div>
+  </div>
+  <div class="areas-row" id="areasRow"></div>
+</div>
+
+<div class="sync-bar"><div class="sync-dot" id="syncDot"></div><span class="sync-txt" id="syncTxt">Conectando...</span></div>
+
+<div class="exp-row">
+  <button class="bexp bexp-xl" id="btnExcel">&#128202; Exportar a Excel</button>
+  <button class="bexp bexp-pd" id="btnPdf">&#128196; Exportar a PDF</button>
+</div>
+
+<div class="srch-wrap">
+  <input class="srch-inp" id="srch" type="text" placeholder="Buscar poblacion...">
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="mhd">
+      <div class="mtitle" id="mTitle"></div>
+      <div class="msub"   id="mSub"></div>
+      <button class="mclose" id="mClose">&#10005;</button>
+    </div>
+    <div class="mbody">
+
+      <div class="att-wrap">
+        <button class="att-btn abverde" data-st="asiste">&#10003;<br>ASISTE</button>
+        <button class="att-btn abrojo"  data-st="no-asiste">&#10005;<br>NO ASISTE</button>
+        <button class="att-btn abazul"  data-st="falta-datos">&#9888;<br>ASISTE FALTA DATOS</button>
+      </div>
+
+      <div class="form-body" id="formBody">
+
+        <div class="sep"><span>Datos de las Filas</span></div>
+
+        <div class="fg">
+          <label class="fl" id="lbl-filaMora">Nombre de la Fila Mora</label>
+          <input class="fi" id="f-filaMora" type="text" placeholder="Nombre fila mora...">
+        </div>
+
+        <div class="fg">
+          <label class="fl" id="lbl-filaCristiana">Nombre de la Fila Cristiana</label>
+          <input class="fi" id="f-filaCristiana" type="text" placeholder="Nombre fila cristiana...">
+          <div class="tabs">
+            <button class="tbtn on" data-tab="general">Datos Generales</button>
+            <button class="tbtn"    data-tab="musica">Musica Cristiana</button>
+          </div>
+          <div class="mus-sec" id="musSec">
+            <label class="fl" style="margin-bottom:7px;">Tipo de Musica</label>
+            <div class="mus-opts">
+              <button class="mopt" data-musica="marcha">MARCHA<br>CRISTIANA</button>
+              <button class="mopt" data-musica="pasodoble">PASODOBLE</button>
+              <button class="mopt" data-musica="especial">MUSICA<br>ESPECIAL</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"><span>Cabos</span></div>
+        <div class="two">
+          <div class="fg">
+            <label class="fl">Nombre Cabo Moro</label>
+            <input class="fi" id="f-caboMoro" type="text" placeholder="Cabo moro...">
+          </div>
+          <div class="fg">
+            <label class="fl">Nombre Cabo Cristiano</label>
+            <input class="fi" id="f-caboCristiano" type="text" placeholder="Cabo cristiano...">
+          </div>
+        </div>
+
+        <div class="sep"><span>Asistentes</span></div>
+        <div class="fg">
+          <label class="fl">Numero de Asistentes Ninos/as</label>
+          <div class="ctr">
+            <button class="cbtn" data-cid="f-ninos" data-d="-1">&#8722;</button>
+            <input class="cval" id="f-ninos" type="number" value="0" min="0" readonly>
+            <button class="cbtn" data-cid="f-ninos" data-d="1">&#43;</button>
+          </div>
+        </div>
+        <div class="two">
+          <div class="fg">
+            <label class="fl" id="lbl-fmn">Numero de Asistentes Fila Mora</label>
+            <div class="ctr">
+              <button class="cbtn" data-cid="f-fmn" data-d="-1">&#8722;</button>
+              <input class="cval" id="f-fmn" type="number" value="0" min="0" max="16">
+              <button class="cbtn" data-cid="f-fmn" data-d="1">&#43;</button>
+            </div>
+            <div class="clim">Min: 0 - Max: 16</div>
+          </div>
+          <div class="fg">
+            <label class="fl" id="lbl-fcn">Numero de Asistentes Fila Cristiana</label>
+            <div class="ctr">
+              <button class="cbtn" data-cid="f-fcn" data-d="-1">&#8722;</button>
+              <input class="cval" id="f-fcn" type="number" value="0" min="0" max="16">
+              <button class="cbtn" data-cid="f-fcn" data-d="1">&#43;</button>
+            </div>
+            <div class="clim">Min: 0 - Max: 16</div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Numero de Asistentes a la Cena</label>
+          <div class="ctr">
+            <button class="cbtn" data-cid="f-cena" data-d="-1">&#8722;</button>
+            <input class="cval" id="f-cena" type="number" value="0" min="0" readonly>
+            <button class="cbtn" data-cid="f-cena" data-d="1">&#43;</button>
+          </div>
+        </div>
+
+        <div class="sep"><span>Especialidades</span></div>
+        <div class="fg">
+          <label class="fl">Especialidades / Notas Especiales</label>
+          <textarea class="fta" id="f-especialidades" placeholder="Anota especialidades, requisitos o notas adicionales..."></textarea>
+        </div>
+
+        <div class="sep"><span>Contacto</span></div>
+        <div class="fg">
+          <label class="fl">Persona de Contacto UNDEF</label>
+          <div class="pills" id="pillsPersona">
+            <button class="pill" data-persona="TERESA">TERESA</button>
+            <button class="pill" data-persona="LAURA">LAURA</button>
+            <button class="pill" data-persona="PEPA">PEPA</button>
+          </div>
+        </div>
+        <div class="two">
+          <div class="fg">
+            <label class="fl">E-mail de Contacto</label>
+            <input class="fi" id="f-email" type="email" placeholder="correo@ejemplo.com">
+          </div>
+          <div class="fg">
+            <label class="fl">Telefono de Contacto</label>
+            <input class="fi" id="f-telefono" type="tel" placeholder="000 000 000">
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Forma de Contacto Preferida</label>
+          <div class="pills" id="pillsForma">
+            <button class="pill" data-forma="EMAIL">E-MAIL</button>
+            <button class="pill" data-forma="TELEFONO">TELEFONO</button>
+            <button class="pill" data-forma="OTROS">OTROS</button>
+          </div>
+          <div class="otros-wrap" id="otrosWrap">
+            <input class="fi" id="f-otrosTxt" type="text" placeholder="Especifica otra forma de contacto...">
+          </div>
+        </div>
+
+      </div><!-- /form-body -->
+
+      <button class="btn-save" id="btnSave">GUARDAR DATOS</button>
+      <button class="btn-delete" id="btnDelete" style="display:none">BORRAR TODOS LOS DATOS</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">&#9888;&#65039;</div>
+    <div class="confirm-title">Borrar datos?</div>
+    <div class="confirm-msg">Se eliminaran todos los datos registrados para esta poblacion. Esta accion no se puede deshacer.</div>
+    <div class="confirm-btns">
+      <button class="confirm-btn cyes" id="confirmYes">SI, BORRAR</button>
+      <button class="confirm-btn cno"  id="confirmNo">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-poblaciones -->
+
+<div class="tab-section" id="tab-bandas">
+<div class="bandas-wrap">
+  <div class="bandas-header">
+    <div class="bandas-title">Bandas Asistentes al Desfile</div>
+    <div class="bandas-stats">
+      <div class="bstat"><div class="bstat-n" id="bcnt-total">0</div><div class="bstat-l">Total Bandas</div></div>
+      <div class="bstat"><div class="bstat-n" id="bcnt-mora" style="color:#7aadcf">0</div><div class="bstat-l">Mora</div></div>
+      <div class="bstat"><div class="bstat-n" id="bcnt-crist" style="color:var(--oro)">0</div><div class="bstat-l">Cristiana</div></div>
+      <div class="bstat"><div class="bstat-n" id="bcnt-comp" style="color:#4caf82">0</div><div class="bstat-l">Componentes</div></div>
+    </div>
+    <button class="btn-add-banda" id="btnAddBanda">+ NUEVA BANDA</button>
+    <button class="btn-add-banda" id="btnExportBandas" style="background:linear-gradient(135deg,#cf5b5b,#a33);">&#128196; Exportar PDF</button>
+  </div>
+  <div class="bandas-grid" id="bandasGrid"></div>
+</div>
+</div><!-- /tab-bandas -->
+
+<div class="tab-section" id="tab-organigrama">
+  <div class="org-wrap">
+    <div class="org-header">
+      <div class="org-title">Organigrama del Desfile</div>
+      <div class="org-subtitle">Solo poblaciones con estado ASISTE, ordenadas alfabeticamente.</div>
+      <button id="btnExportOrg" style="margin-top:8px;padding:6px 18px;background:linear-gradient(135deg,#cf5b5b,#a33);border:1px solid rgba(207,91,91,.4);border-radius:5px;color:#fff;font-size:.68rem;letter-spacing:.08em;cursor:pointer;">&#128196; Exportar PDF</button>
+    </div>
+    <div id="orgDesfile"></div>
+  </div>
+</div><!-- /tab-organigrama -->
+
+<!-- MODAL BANDA -->
+<div class="mbanda-overlay" id="mbandaOverlay">
+  <div class="mbanda">
+    <div class="mbanda-hd">
+      <div class="mbanda-title" id="mbandaTitle">Nueva Banda</div>
+      <button class="mbanda-close" id="mbandaClose">&#10005;</button>
+    </div>
+    <div class="mbanda-body">
+      <div class="fg">
+        <label class="fl">Nombre de la Banda</label>
+        <input class="fi" id="b-nombre" type="text" placeholder="Nombre de la banda...">
+      </div>
+      <div class="fg">
+        <label class="fl">Numero de Componentes</label>
+        <div class="ctr">
+          <button class="cbtn" data-cid="b-comp" data-d="-1">&#8722;</button>
+          <input class="cval" id="b-comp" type="number" value="0" min="0">
+          <button class="cbtn" data-cid="b-comp" data-d="1">&#43;</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Poblacion de Origen</label>
+        <input class="fi" id="b-origen" type="text" placeholder="Poblacion de origen de la banda...">
+      </div>
+      <div class="fg">
+        <label class="fl">Bando</label>
+        <div class="pills" id="pillsBando">
+          <button class="pill" data-bando="mora">BANDO MORO</button>
+          <button class="pill" data-bando="cristiana">BANDO CRISTIANO</button>
+        </div>
+      </div>
+      <div id="bandaAcompInfo" style="display:none;margin:8px 0;padding:8px 12px;background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.3);border-radius:6px;font-size:.75rem;color:#4caf82;"></div>
+      <div class="sep"><span>Poblaciones a las que Acompana</span></div>
+      <div class="fg" id="pobWrap">
+        <label class="fl" id="pobWrapLabel">Selecciona primero el bando</label>
+        <div id="pobNoneMsg" style="padding:8px;font-size:.75rem;color:rgba(245,237,224,.4)">
+          Una vez elegido el bando podras seleccionar las poblaciones a las que acompana esta banda en ese bando.
+        </div>
+        <div class="pob-check-list" id="pobCheckList" style="display:none"></div>
+      </div>
+      <div class="sep"><span>Pieza Musical a Interpretar</span></div>
+      <div class="fg">
+        <label class="fl">Pieza 1</label>
+        <input class="fi" id="b-pieza1" type="text" placeholder="Nombre de la pieza musical...">
+      </div>
+      <div class="fg">
+        <label class="fl">Pieza 2</label>
+        <input class="fi" id="b-pieza2" type="text" placeholder="Nombre de la pieza musical...">
+      </div>
+      <div class="fg">
+        <label class="fl">Pieza 3</label>
+        <input class="fi" id="b-pieza3" type="text" placeholder="Nombre de la pieza musical...">
+      </div>
+      <button class="btn-save" id="btnSaveBanda">GUARDAR BANDA</button>
+      <button class="btn-delete" id="btnDelBanda" style="display:none">BORRAR BANDA</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- CONFIRM BANDA DELETE -->
+<div class="confirm-overlay" id="confirmOvBanda">
+  <div class="confirm-box">
+    <div class="confirm-icon">&#9888;</div>
+    <div class="confirm-title">Borrar banda?</div>
+    <div class="confirm-msg">Se eliminara esta banda. Esta accion no se puede deshacer.</div>
+    <div class="confirm-btns">
+      <button class="confirm-btn cyes" id="confirmYesBanda">SI, BORRAR</button>
+      <button class="confirm-btn cno"  id="confirmNoBanda">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FIJO EDITABLE -->
+<div class="mfijo-overlay" id="mfijoOverlay">
+  <div class="mfijo-box">
+    <div class="mfijo-title" id="mfijoTitle">Editar elemento</div>
+    <textarea id="mfijoText" rows="3"></textarea>
+    <div class="mfijo-btns">
+      <button class="mfijo-save"   id="mfijoSave">GUARDAR</button>
+      <button class="mfijo-cancel" id="mfijoCancel">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Datos guardados correctamente</div>
+<div class="toast" id="toastBanda" style="border-color:#c9a84c;color:#c9a84c;">Banda guardada correctamente</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATOS GLOBALES
+// ═══════════════════════════════════════════════
+var POBS = [
+  {n:"Abanilla",a:"VII"},{n:"Ador",a:"I"},{n:"Agost",a:"V"},{n:"Agullent",a:"I"},
+  {n:"Aielo de Malferit",a:"I"},{n:"Albaida",a:"I"},{n:"Albatera",a:"IV"},
+  {n:"Alicante Federacion",a:"V"},{n:"Almansa",a:"III"},{n:"Almoradi",a:"IV"},
+  {n:"Altea",a:"VI"},{n:"Altozano",a:"V"},{n:"Alzira",a:"II"},{n:"Archena",a:"VII"},
+  {n:"Aspe",a:"III"},{n:"Banyeres de Mariola",a:"III"},{n:"Bellreguard",a:"VI"},
+  {n:"Benamaurel",a:"VII"},{n:"Beneixama",a:"III"},{n:"Benidorm",a:"VI"},
+  {n:"Beniganim",a:"I"},{n:"Benissa",a:"VI"},{n:"Bocairent",a:"I"},{n:"Busot",a:"V"},
+  {n:"Callosa den Sarria",a:"VI"},{n:"Callosa de Segura",a:"IV"},{n:"Calp",a:"VI"},
+  {n:"Campotejar",a:"VII"},{n:"Caravaca de la Cruz",a:"VII"},{n:"Castalla",a:"V"},
+  {n:"Castello",a:"II"},{n:"Caudete",a:"III"},{n:"Cieza",a:"VII"},{n:"Cocentaina",a:"I"},
+  {n:"Crevillent",a:"IV"},{n:"Denia",a:"VI"},{n:"El Camp de Mirra",a:"III"},
+  {n:"El Campello",a:"V"},{n:"El Rebolledo",a:"V"},{n:"Elche",a:"IV"},
+  {n:"Fontanars dels Alforins",a:"I"},{n:"Genoves",a:"II"},
+  {n:"Guardamar del Segura",a:"IV"},{n:"Hondon de las Nieves",a:"III"},
+  {n:"Ibi",a:"V"},{n:"Jumilla",a:"VII"},{n:"LOlleria",a:"I"},
+  {n:"La Font de la Figuera",a:"III"},{n:"La Pobla Llarga",a:"II"},
+  {n:"La Vila Joiosa",a:"VI"},{n:"Lleida",a:"II"},{n:"Llutxent",a:"I"},
+  {n:"Los Alcazares",a:"VII"},{n:"Molina de Segura",a:"VII"},
+  {n:"Monforte del Cid",a:"III"},{n:"Moraira",a:"VI"},{n:"Murcia",a:"VII"},
+  {n:"Muro de LAlcoi",a:"I"},{n:"Mutxamel",a:"V"},{n:"Novelda",a:"III"},
+  {n:"Oliva",a:"VI"},{n:"Onil",a:"V"},{n:"Ontinyent",a:"I"},{n:"Orihuela",a:"IV"},{n:"Paterna",a:"II"},
+  {n:"Petrer",a:"III"},{n:"Piles",a:"VI"},{n:"Riba-Roja de Turia",a:"II"},
+  {n:"Rotova",a:"I"},{n:"Salinas",a:"III"},{n:"San Blas Alicante",a:"V"},
+  {n:"Sant Vicent del Raspeig",a:"V"},{n:"SantaPola",a:"IV"},{n:"Santomera",a:"VII"},
+  {n:"Sax",a:"III"},{n:"Torre-pacheco",a:"VII"},{n:"Torrent",a:"II"},
+  {n:"Valencia Federacio",a:"II"},{n:"Valverde de Jucar",a:"II"},
+  {n:"Villafranqueza El Palamo",a:"V"},{n:"Villena",a:"III"},
+  {n:"Xabia",a:"VI"},{n:"Xixona",a:"V"},{n:"Xixona Geladors",a:"V"}
+];
+
+var DB       = {};
+var curPob   = null, curMusica = null, curPersona = null, curForma = null, curStatus = null;
+var BANDAS   = {};
+var curBanda = null, curBando = null;
+var fbPobs   = null, fbBandas = null;
+
+// ═══════════════════════════════════════════════
+// FIREBASE LOADER
+// ═══════════════════════════════════════════════
+function loadScript(url, cb) {
+  var s = document.createElement('script');
+  s.src = url;
+  s.onload = cb;
+  document.head.appendChild(s);
+}
+
+loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js', function() {
+  loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js', function() {
+    startApp();
+  });
+});
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+function startApp() {
+  firebase.initializeApp({
+    apiKey: "AIzaSyAwAXr0p8SJ4RBtmfAzqgQp-Jmhg-Flc1g",
+    authDomain: "desfile-cocentaina.firebaseapp.com",
+    databaseURL: "https://desfile-cocentaina-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "desfile-cocentaina",
+    storageBucket: "desfile-cocentaina.firebasestorage.app",
+    messagingSenderId: "771712428919",
+    appId: "1:771712428919:web:19fbf932ef8773eead8f72"
+  });
+
+  fbPobs   = firebase.database().ref("poblaciones");
+  fbBandas = firebase.database().ref("bandas");
+  initFijos();
+
+  // Sync indicator
+  firebase.database().ref(".info/connected").on("value", function(snap) {
+    var dot = document.getElementById("syncDot");
+    var txt = document.getElementById("syncTxt");
+    if (snap.val()) { dot.className="sync-dot on"; txt.textContent="Conectado - sincronizando en tiempo real"; }
+    else            { dot.className="sync-dot err"; txt.textContent="Sin conexion..."; }
+  });
+
+  // Poblaciones listener
+  fbPobs.on("value", function(snap) {
+    DB = snap.val() || {};
+    renderGrid(currentFilter());
+    updateStats();
+    // Always rebuild organigrama if it's visible
+    var orgTab = document.getElementById("tab-organigrama");
+    if (orgTab && orgTab.classList.contains("active")) buildOrganigrama();
+  });
+
+  // Bandas listener
+  fbBandas.on("value", function(snap) {
+    BANDAS = snap.val() || {};
+    window.BANDAS = BANDAS;
+    renderBandas();
+    updateBandasStats();
+    var orgTab = document.getElementById("tab-organigrama");
+    if (orgTab && orgTab.classList.contains("active")) buildOrganigrama();
+  });
+
+  // Render initial grid
+  renderGrid(POBS);
+  updateStats();
+}
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+function el(id) { return document.getElementById(id); }
+
+function encodeKey(n) { return n.replace(/[.#$/\[\]]/g, "_"); }
+
+function getDB(name) {
+  return DB[encodeKey(name)] || DB[name] || {};
+}
+
+function currentFilter() {
+  var q = el('srch') ? el('srch').value.toLowerCase() : '';
+  if (!q) return POBS;
+  return POBS.filter(function(p){ return p.n.toLowerCase().indexOf(q) >= 0; });
+}
+
+function showToast(id) {
+  var t = el(id);
+  if (!t) return;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+// ═══════════════════════════════════════════════
+// POBLACIONES - GRID
+// ═══════════════════════════════════════════════
+function renderGrid(list) {
+  var g = el('grid');
+  if (!g) return;
+  g.innerHTML = '';
+  if (!list || !list.length) {
+    g.innerHTML = '<div class="nores">No se encontraron poblaciones</div>';
+    return;
+  }
+  for (var i = 0; i < list.length; i++) {
+    var p = list[i];
+    var d = getDB(p.n);
+    var card = document.createElement('div');
+    var cls = 'card';
+    if (d.status === 'asiste')      cls += ' casiste';
+    if (d.status === 'no-asiste')   cls += ' cnoasiste';
+    if (d.status === 'falta-datos') cls += ' cfaltadatos';
+    card.className = cls;
+    card.setAttribute('data-pob', p.n);
+
+    var badge = '';
+    if (d.status === 'asiste')      badge = '<span class="cbadge ca">Asiste</span>';
+    if (d.status === 'no-asiste')   badge = '<span class="cbadge cn">No Asiste</span>';
+    if (d.status === 'falta-datos') badge = '<span class="cbadge cf">Falta Datos</span>';
+
+    var filas = '';
+    if (d.status === 'asiste') {
+      var isSaxCard = p.n.toLowerCase() === 'sax';
+      var fmLbl = isSaxCard ? 'Fila Crist. Especial' : 'Fila Mora';
+      var fcLbl = 'Fila Cristiana';
+      var fm = fmLbl + ': ' + (d.fmn||0);
+      var fc = fcLbl + ': ' + (d.fcn||0);
+      filas = '<div class="cfilas">' + fm + '</div><div class="cfilas">' + fc + '</div>';
+    }
+
+    card.innerHTML = badge
+      + '<div class="cname">' + p.n + '</div>'
+      + '<div class="carea">Area ' + p.a + '</div>'
+      + filas;
+    g.appendChild(card);
+  }
+}
+
+function updateStats() {
+  var ta=0, tn=0, tf=0, tc=0, ac={};
+  for (var i = 0; i < POBS.length; i++) {
+    var d = getDB(POBS[i].n);
+    if (!d.status) continue;
+    if (d.status === 'asiste')      { ta++; tc += (d.cena||0); }
+    if (d.status === 'no-asiste')   tn++;
+    if (d.status === 'falta-datos') tf++;
+    if (d.status !== 'no-asiste')   ac[POBS[i].a] = (ac[POBS[i].a]||0) + 1;
+  }
+  el('cnt-a').textContent = ta;
+  el('cnt-n').textContent = tn;
+  el('cnt-f').textContent = tf;
+  el('cnt-p').textContent = 84 - ta - tn - tf;
+  el('cnt-c').textContent = tc;
+  var areas = ['I','II','III','IV','V','VI','VII'], html = '';
+  for (var i = 0; i < areas.length; i++) {
+    var a = areas[i], tot = 0;
+    for (var j = 0; j < POBS.length; j++) { if (POBS[j].a === a) tot++; }
+    html += '<div class="abadge">Area ' + a + ': <b>' + (ac[a]||0) + '</b>/' + tot + '</div>';
+  }
+  el('areasRow').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+// POBLACIONES - MODAL
+// ═══════════════════════════════════════════════
+function openModal(nm) {
+  curPob = nm; curMusica = null; curPersona = null; curForma = null; curStatus = null;
+  var p = null;
+  for (var i=0;i<POBS.length;i++) { if (POBS[i].n===nm) { p=POBS[i]; break; } }
+  el('mTitle').textContent = nm;
+  el('mSub').textContent   = 'Area ' + p.a;
+  clearAttBtns();
+  el('formBody').classList.remove('show');
+  resetForm();
+  var d = getDB(nm);
+  if (d && d.status) {
+    activateStatus(d.status);
+    if (d.status === 'asiste') {
+      el('f-filaMora').value      = d.filaMora||'';
+      el('f-filaCristiana').value = d.filaCristiana||'';
+      el('f-caboMoro').value      = d.caboMoro||'';
+      el('f-caboCristiano').value = d.caboCristiano||'';
+      el('f-especialidades').value= d.especialidades||'';
+      el('f-email').value         = d.email||'';
+      el('f-telefono').value      = d.telefono||'';
+      el('f-otrosTxt').value      = d.otrosTxt||'';
+      el('f-ninos').value = d.ninos!==undefined ? d.ninos : 0;
+      el('f-fmn').value   = d.fmn!==undefined   ? d.fmn   : 0;
+      el('f-fcn').value   = d.fcn!==undefined   ? d.fcn   : 0;
+      el('f-cena').value  = d.cena!==undefined  ? d.cena  : 0;
+      if (d.musica)  activateMusica(d.musica);
+      if (d.persona) activatePersona(d.persona);
+      if (d.forma)   activateForma(d.forma);
+    }
+  }
+  // Special labels for SAX
+  var isSax = (nm.toLowerCase() === 'sax');
+  var lblFM  = document.getElementById('lbl-filaMora');
+  var lblFC  = document.getElementById('lbl-filaCristiana');
+  var lblFMN = document.getElementById('lbl-fmn');
+  var lblFCN = document.getElementById('lbl-fcn');
+  if (lblFM)  lblFM.textContent  = isSax ? 'Nombre de la Fila Cristiana Especial' : 'Nombre de la Fila Mora';
+  if (lblFC)  lblFC.textContent  = isSax ? 'Nombre de la Fila Cristiana'          : 'Nombre de la Fila Cristiana';
+  if (lblFMN) lblFMN.textContent = isSax ? 'Numero de Asistentes Fila Cristiana Especial' : 'Numero de Asistentes Fila Mora';
+  if (lblFCN) lblFCN.textContent = isSax ? 'Numero de Asistentes Fila Cristiana'          : 'Numero de Asistentes Fila Cristiana';
+
+  el('btnDelete').style.display = (d && d.status) ? 'block' : 'none';
+  el('overlay').classList.add('open');
+}
+
+function closeModal() { el('overlay').classList.remove('open'); }
+
+function resetForm() {
+  var ids = ['f-filaMora','f-filaCristiana','f-caboMoro','f-caboCristiano',
+             'f-especialidades','f-email','f-telefono','f-otrosTxt'];
+  for (var i=0;i<ids.length;i++) el(ids[i]).value = '';
+  el('f-ninos').value=0; el('f-fmn').value=0; el('f-fcn').value=0; el('f-cena').value=0;
+  document.querySelectorAll('.mopt').forEach(function(b){ b.classList.remove('on'); });
+  el('musSec').classList.remove('show');
+  document.querySelectorAll('.tbtn').forEach(function(b,i){ b.classList.toggle('on',i===0); });
+  document.querySelectorAll('#pillsPersona .pill, #pillsForma .pill').forEach(function(b){ b.classList.remove('on'); });
+  el('otrosWrap').classList.remove('show');
+}
+
+function clearAttBtns() {
+  document.querySelectorAll('.att-btn').forEach(function(b){ b.classList.remove('sel'); });
+}
+
+function activateStatus(st) {
+  curStatus = st;
+  clearAttBtns();
+  document.querySelectorAll('.att-btn').forEach(function(b){
+    if (b.getAttribute('data-st')===st) b.classList.add('sel');
+  });
+  if (st==='asiste') el('formBody').classList.add('show');
+  else el('formBody').classList.remove('show');
+}
+
+function activateMusica(v) {
+  curMusica = v;
+  document.querySelectorAll('.mopt').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-musica')===v);
+  });
+}
+
+function activatePersona(v) {
+  curPersona = v;
+  document.querySelectorAll('#pillsPersona .pill').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-persona')===v);
+  });
+}
+
+function activateForma(v) {
+  curForma = v;
+  document.querySelectorAll('#pillsForma .pill').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-forma')===v);
+  });
+  el('otrosWrap').classList.toggle('show', v==='OTROS');
+}
+
+function changeCount(id, delta) {
+  var e = el(id);
+  var mn = parseInt(e.min)||0, mx = parseInt(e.max)||9999;
+  e.value = Math.max(mn, Math.min(mx, parseInt(e.value)+delta));
+}
+
+function savePob() {
+  if (!curPob || !curStatus) return;
+  var key = encodeKey(curPob);
+  if (!DB[key]) DB[key] = {};
+  var d = DB[key];
+  d.status = curStatus;
+  if (curStatus === 'asiste') {
+    d.filaMora      = el('f-filaMora').value;
+    d.filaCristiana = el('f-filaCristiana').value;
+    d.caboMoro      = el('f-caboMoro').value;
+    d.caboCristiano = el('f-caboCristiano').value;
+    d.especialidades= el('f-especialidades').value;
+    d.email         = el('f-email').value;
+    d.telefono      = el('f-telefono').value;
+    d.otrosTxt      = el('f-otrosTxt').value;
+    d.ninos = parseInt(el('f-ninos').value)||0;
+    d.fmn   = parseInt(el('f-fmn').value)||0;
+    d.fcn   = parseInt(el('f-fcn').value)||0;
+    d.cena  = parseInt(el('f-cena').value)||0;
+    d.musica=curMusica; d.persona=curPersona; d.forma=curForma;
+  }
+  fbPobs.child(key).set(d);
+  closeModal();
+  showToast('toast');
+}
+
+function deletePob() {
+  if (!curPob) return;
+  fbPobs.child(encodeKey(curPob)).remove();
+  closeModal();
+}
+
+// ═══════════════════════════════════════════════
+// BANDAS
+// ═══════════════════════════════════════════════
+function renderBandas() {
+  var g = el('bandasGrid');
+  if (!g) return;
+  var ids = Object.keys(BANDAS);
+  if (!ids.length) {
+    g.innerHTML = '<div class="bandas-empty">No hay bandas registradas. Pulsa + NUEVA BANDA para anadir.</div>';
+    return;
+  }
+  g.innerHTML = '';
+  for (var i=0; i<ids.length; i++) {
+    var id = ids[i], b = BANDAS[id];
+    var card = document.createElement('div');
+    card.className = 'banda-card ' + (b.bando||'');
+    card.setAttribute('data-banda-id', id);
+    var badge = b.bando==='mora'
+      ? '<span class="banda-bando mora">Bando Moro</span>'
+      : '<span class="banda-bando cristiana">Bando Cristiano</span>';
+    var pobs = '';
+    if (b.poblaciones && b.poblaciones.length) {
+      for (var j=0;j<b.poblaciones.length;j++) {
+        pobs += '<span class="banda-pob-tag">'+b.poblaciones[j]+'</span>';
+      }
+    }
+    // Calculate total people accompanied from poblaciones data
+    var totalAcomp = 0;
+    if (b.poblaciones && b.poblaciones.length) {
+      for (var j=0; j<b.poblaciones.length; j++) {
+        var pd = getDB(b.poblaciones[j]);
+        if (pd) totalAcomp += b.bando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+      }
+    }
+    var acompStr = totalAcomp > 0
+      ? '<div class="banda-info" style="color:var(--verde)">Personas acompanadas: <b>'+totalAcomp+'</b></div>'
+      : '';
+
+    var piezasHtml = '';
+    if (b.pieza1) piezasHtml += '<div class="banda-info" style="color:var(--oro)">&#9835; ' + b.pieza1 + '</div>';
+    if (b.pieza2) piezasHtml += '<div class="banda-info" style="color:var(--oro)">&#9835; ' + b.pieza2 + '</div>';
+    if (b.pieza3) piezasHtml += '<div class="banda-info" style="color:var(--oro)">&#9835; ' + b.pieza3 + '</div>';
+
+    card.innerHTML = badge
+      + '<div class="banda-nombre">'+(b.nombre||'-')+'</div>'
+      + '<div class="banda-info">Componentes banda: <b>'+(b.componentes||0)+'</b></div>'
+      + '<div class="banda-info">Origen: '+(b.origen||'-')+'</div>'
+      + piezasHtml
+      + acompStr
+      + (pobs ? '<div class="banda-pobs">'+pobs+'</div>' : '');
+    g.appendChild(card);
+  }
+}
+
+function updateBandasStats() {
+  var ids=Object.keys(BANDAS), total=ids.length, mora=0, crist=0, comp=0;
+  for (var i=0;i<ids.length;i++) {
+    var b=BANDAS[ids[i]];
+    if (b.bando==='mora') mora++;
+    if (b.bando==='cristiana') crist++;
+    comp += (b.componentes||0);
+  }
+  if(el('bcnt-total')) el('bcnt-total').textContent=total;
+  if(el('bcnt-mora'))  el('bcnt-mora').textContent=mora;
+  if(el('bcnt-crist')) el('bcnt-crist').textContent=crist;
+  if(el('bcnt-comp'))  el('bcnt-comp').textContent=comp;
+}
+
+function buildPobList(bando, sel) {
+  var list    = el('pobCheckList');
+  var msg     = el('pobNoneMsg');
+  var label   = el('pobWrapLabel');
+  if (!list) return;
+
+  if (!bando) {
+    list.style.display = 'none';
+    msg.style.display  = 'block';
+    label.textContent  = 'Selecciona primero el bando';
+    return;
+  }
+
+  var bandoLabel = bando === 'mora' ? 'Bando Moro' : 'Bando Cristiano';
+  label.textContent  = 'Poblaciones que acompana en ' + bandoLabel;
+  msg.style.display  = 'none';
+  list.style.display = 'block';
+  list.innerHTML     = '';
+
+  // Build set of already-assigned populations for this bando (excluding current banda)
+  var assigned = {};
+  var currentBandas = window.BANDAS || BANDAS || {};
+  var bandaIds = Object.keys(currentBandas);
+  for (var k=0; k<bandaIds.length; k++) {
+    var bid = bandaIds[k];
+    if (bid === curBanda) continue; // skip current banda being edited
+    var b = currentBandas[bid];
+    if (b && b.bando === bando && b.poblaciones) {
+      for (var m=0; m<b.poblaciones.length; m++) {
+        assigned[b.poblaciones[m]] = true;
+      }
+    }
+  }
+
+  var att = [];
+  for (var i=0; i<POBS.length; i++) {
+    var d = getDB(POBS[i].n);
+    if (d && d.status==='asiste') att.push(POBS[i]);
+  }
+
+  if (!att.length) {
+    list.innerHTML = '<p style="font-size:.75rem;color:rgba(245,237,224,.4);padding:8px">No hay poblaciones con estado ASISTE todavia.</p>';
+    return;
+  }
+
+  for (var i=0; i<att.length; i++) {
+    var p   = att[i];
+    // Skip if already assigned to another banda in this bando
+    if (assigned[p.n]) continue;
+    var chk = sel && sel.indexOf(p.n) >= 0;
+    var div = document.createElement('div');
+    div.className = 'pob-check-item' + (chk ? ' checked' : '');
+    div.innerHTML = '<input type="checkbox" id="pb'+i+'" value="'+p.n+'"'+(chk?' checked':'')+'>'
+      + '<label for="pb'+i+'">'+p.n+' (Area '+p.a+')</label>';
+    div.querySelector('input').addEventListener('change', function() {
+      this.parentElement.classList.toggle('checked', this.checked);
+      updateAcompInfo();
+    });
+    list.appendChild(div);
+  }
+}
+
+function updateAcompInfo() {
+  var info = document.getElementById('bandaAcompInfo');
+  if (!info || !curBando) return;
+  var total = 0;
+  var checked = document.querySelectorAll('#pobCheckList input:checked');
+  for (var i=0; i<checked.length; i++) {
+    var pd = getDB(checked[i].value);
+    if (pd) total += curBando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+  }
+  if (total > 0) {
+    info.style.display = 'block';
+    var bandoLabel = curBando === 'mora' ? 'fila mora' : 'fila cristiana';
+    info.textContent = 'Total personas de ' + bandoLabel + ' a acompanar: ' + total;
+  } else {
+    info.style.display = 'none';
+  }
+}
+
+function openBandaModal(id) {
+  curBanda = id || null;
+  curBando = null;
+  el('mbandaTitle').textContent = id ? 'Editar Banda' : 'Nueva Banda';
+  el('b-nombre').value = '';
+  el('b-comp').value   = 0;
+  el('b-origen').value = '';
+  el('b-pieza1').value = '';
+  el('b-pieza2').value = '';
+  el('b-pieza3').value = '';
+  el('btnDelBanda').style.display = 'none';
+  document.querySelectorAll('#pillsBando .pill').forEach(function(p){ p.classList.remove('on'); });
+  var sel = [];
+  if (id && BANDAS[id]) {
+    var b = BANDAS[id];
+    el('b-nombre').value = b.nombre||'';
+    el('b-comp').value   = b.componentes||0;
+    el('b-origen').value = b.origen||'';
+    el('b-pieza1').value = b.pieza1||'';
+    el('b-pieza2').value = b.pieza2||'';
+    el('b-pieza3').value = b.pieza3||'';
+    sel = b.poblaciones||[];
+    if (b.bando) activateBando(b.bando);
+    el('btnDelBanda').style.display = 'block';
+  }
+  buildPobList(null, []);
+  // If editing and has bando, populate the list
+  if (id && BANDAS[id] && BANDAS[id].bando) {
+    buildPobList(BANDAS[id].bando, sel);
+  }
+  updateAcompInfo();
+  el('mbandaOverlay').classList.add('open');
+}
+
+function closeBandaModal() { el('mbandaOverlay').classList.remove('open'); }
+
+function activateBando(v) {
+  // If changing bando, clear previous selection
+  if (curBando && curBando !== v) {
+    var list = el('pobCheckList');
+    if (list) list.querySelectorAll('input:checked').forEach(function(c){ c.checked=false; c.parentElement.classList.remove('checked'); });
+  }
+  curBando = v;
+  document.querySelectorAll('#pillsBando .pill').forEach(function(p){
+    p.classList.toggle('on', p.getAttribute('data-bando')===v);
+  });
+  // Get current selections (when editing)
+  var sel = [];
+  if (curBanda && BANDAS[curBanda] && BANDAS[curBanda].bando === v) {
+    sel = BANDAS[curBanda].poblaciones || [];
+  }
+  buildPobList(v, sel);
+  updateAcompInfo();
+}
+
+function saveBanda() {
+  var nombre = el('b-nombre').value.trim();
+  if (!nombre) { alert('Introduce el nombre de la banda.'); return; }
+  if (!curBando) { alert('Selecciona el bando (Moro o Cristiano).'); return; }
+  var sel = [];
+  el('pobCheckList').querySelectorAll('input:checked').forEach(function(c){ sel.push(c.value); });
+  var id   = curBanda || ('b'+Date.now());
+  var data = {
+    nombre: nombre,
+    componentes: parseInt(el('b-comp').value)||0,
+    origen: el('b-origen').value.trim(),
+    bando: curBando,
+    poblaciones: sel,
+    pieza1: el('b-pieza1').value.trim(),
+    pieza2: el('b-pieza2').value.trim(),
+    pieza3: el('b-pieza3').value.trim()
+  };
+  fbBandas.child(id).set(data);
+  closeBandaModal();
+  showToast('toastBanda');
+}
+
+function deleteBanda() {
+  if (!curBanda) return;
+  fbBandas.child(curBanda).remove();
+  closeBandaModal();
+}
+
+// ═══════════════════════════════════════════════
+// EXPORT CSV
+// ═══════════════════════════════════════════════
+function exportExcel() {
+  var rows = [['POBLACION','AREA','ESTADO','FILA MORA','FILA CRISTIANA','CABO MORO','CABO CRISTIANO',
+    'MUSICA','NINOS','ASIST.F.MORA','ASIST.F.CRIST.','CENA','ESPECIALIDADES',
+    'PERSONA','EMAIL','TELEFONO','FORMA','OTROS']];
+  for (var i=0;i<POBS.length;i++) {
+    var p=POBS[i], d=getDB(p.n);
+    var st=d.status==='asiste'?'ASISTE':d.status==='no-asiste'?'NO ASISTE':d.status==='falta-datos'?'FALTA DATOS':'PENDIENTE';
+    rows.push([p.n,p.a,st,d.filaMora||'',d.filaCristiana||'',d.caboMoro||'',d.caboCristiano||'',
+      d.musica||'',d.ninos||'',d.fmn||'',d.fcn||'',d.cena||'',d.especialidades||'',
+      d.persona||'',d.email||'',d.telefono||'',d.forma||'',d.forma==='OTROS'?(d.otrosTxt||''):'']);
+  }
+  var csv = rows.map(function(r){
+    return r.map(function(c){
+      var s=String(c||''); if(s.indexOf(',')>=0||s.indexOf('"')>=0) s='"'+s.replace(/"/g,'""')+'"'; return s;
+    }).join(',');
+  }).join('\r\n');
+  var b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='convencion.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// ═══════════════════════════════════════════════
+// EXPORT PDF
+// ═══════════════════════════════════════════════
+function exportPDF() {
+  var ta=0,tn=0,tf=0,tc=0;
+  for(var i=0;i<POBS.length;i++){var d=getDB(POBS[i].n);if(d.status==='asiste'){ta++;tc+=(d.cena||0);}if(d.status==='no-asiste')tn++;if(d.status==='falta-datos')tf++;}
+  var rows='';
+  for(var i=0;i<POBS.length;i++){
+    var p=POBS[i],d=getDB(p.n);
+    var st=d.status==='asiste'?'ASISTE':d.status==='no-asiste'?'NO ASISTE':d.status==='falta-datos'?'FALTA DATOS':'PENDIENTE';
+    var sc=d.status==='asiste'?'#2d7a50':d.status==='no-asiste'?'#a33':d.status==='falta-datos'?'#2a6a9a':'#888';
+    rows+='<tr><td>'+p.n+'</td><td>'+p.a+'</td><td style="color:'+sc+';font-weight:700">'+st+'</td>'
+      +'<td>'+(d.filaMora||'-')+'</td><td>'+(d.filaCristiana||'-')+'</td>'
+      +'<td>'+(d.caboMoro||'-')+'</td><td>'+(d.caboCristiano||'-')+'</td>'
+      +'<td>'+(d.musica||'-')+'</td><td>'+(d.ninos||'-')+'</td>'
+      +'<td>'+(d.fmn||'-')+'</td><td>'+(d.fcn||'-')+'</td><td>'+(d.cena||'-')+'</td></tr>';
+  }
+  var areas=['I','II','III','IV','V','VI','VII'],arows='';
+  for(var i=0;i<areas.length;i++){
+    var a=areas[i],ps=[],as=0,no=0,fa=0,ca=0;
+    for(var j=0;j<POBS.length;j++){if(POBS[j].a===a){ps.push(POBS[j]);var d=getDB(POBS[j].n);if(d.status==='asiste'){as++;ca+=(d.cena||0);}if(d.status==='no-asiste')no++;if(d.status==='falta-datos')fa++;}}
+    arows+='<tr><td><b>AREA '+a+'</b></td><td>'+ps.length+'</td><td style="color:#2d7a50;font-weight:700">'+as+'</td><td style="color:#a33">'+no+'</td><td style="color:#2a6a9a">'+fa+'</td><td>'+(ps.length-as-no-fa)+'</td><td style="color:#c07040;font-weight:700">'+ca+'</td></tr>';
+  }
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;font-size:9pt;margin:10mm}h1{font-size:12pt;color:#8b1a1a;border-bottom:2px solid #8b1a1a;padding-bottom:4px;margin-bottom:8px}h2{font-size:9pt;color:#1a3a6b;border-bottom:1px solid #1a3a6b;margin:14px 0 5px}table{width:100%;border-collapse:collapse;font-size:7pt}th{background:#8b1a1a;color:#c9a84c;padding:4px;text-align:left}td{padding:3px;border-bottom:1px solid #eee}tr:nth-child(even) td{background:#faf7f2}</style></head><body>'
+    +'<h1>Convencion Moros y Cristianos</h1>'
+    +'<p style="font-size:8pt;margin-bottom:8px">Asisten:<b>'+ta+'</b> | No Asisten:<b>'+tn+'</b> | Faltan Datos:<b>'+tf+'</b> | Pendientes:<b>'+(84-ta-tn-tf)+'</b> | Cena:<b>'+tc+'</b></p>'
+    +'<h2>Listado</h2><table><thead><tr><th>POBLACION</th><th>AREA</th><th>ESTADO</th><th>FILA MORA</th><th>FILA CRIST.</th><th>CABO MORO</th><th>CABO CRIST.</th><th>MUSICA</th><th>NINOS</th><th>F.MORA</th><th>F.CRIST.</th><th>CENA</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    +'<h2>Resumen por Areas</h2><table><thead><tr><th>AREA</th><th>TOTAL</th><th>ASISTEN</th><th>NO ASISTEN</th><th>FALTAN DATOS</th><th>PENDIENTES</th><th>CENA</th></tr></thead><tbody>'+arows+'</tbody></table>'
+    +'</body></html>';
+  var w=window.open('','_blank','width=900,height=700');
+  if(w){w.document.write(html);w.document.close();setTimeout(function(){w.print();},500);}
+}
+
+
+// ═══════════════════════════════════════════════
+// ORGANIGRAMA DEL DESFILE
+// ═══════════════════════════════════════════════
+
+// Fixed elements stored in Firebase
+var DEFAULT_FIJOS = [
+  {id:'f1',  pos:'apertura', order:1, txt:'Bandera UNDEF / Camello'},
+  {id:'f2',  pos:'apertura', order:2, txt:'Tela Mora (6) | Tela Cristiana (6)'},
+  {id:'f3',  pos:'apertura', order:3, txt:'Banderas CC.AA. (Carroza)'},
+  {id:'f4',  pos:'apertura', order:4, txt:'Ballet 1'},
+  {id:'f5',  pos:'apertura', order:5, txt:'Colla Mal Passet (Cocentaina)'},
+  {id:'f6',  pos:'central',  order:1, txt:'Grupo ninos y ninas (todas las poblaciones)'},
+  {id:'f7',  pos:'central',  order:2, txt:'Contrabandistas: Salinas, Piles, Monforte, La Font de la Figuera, Cocentaina'},
+  {id:'f8',  pos:'central',  order:3, txt:'MUSICA 14'},
+  {id:'f9',  pos:'central',  order:4, txt:'Ballet 2'},
+  {id:'f10', pos:'central',  order:5, txt:'Colla Moros Nous (Petrer)'},
+  {id:'f11', pos:'final',    order:1, txt:'Comision 50 Aniversario / Junta Directiva UNDEF'},
+  {id:'f12', pos:'final',    order:2, txt:'Estandartes de las 49 poblaciones'},
+  {id:'f13', pos:'final',    order:3, txt:'MUSICA 27'}
+];
+
+var FIJOS_DB = {};
+var fbFijos  = null;
+var curFijoId = null, curFijoPos = null;
+
+function initFijos() {
+  fbFijos = firebase.database().ref("fijos");
+  fbFijos.once("value", function(snap) {
+    var data = snap.val();
+    if (!data || !Object.keys(data).length) {
+      var seed = {};
+      for (var i = 0; i < DEFAULT_FIJOS.length; i++) seed[DEFAULT_FIJOS[i].id] = DEFAULT_FIJOS[i];
+      fbFijos.set(seed);
+      FIJOS_DB = seed;
+    } else {
+      FIJOS_DB = data;
+    }
+    fbFijos.on("value", function(s) {
+      FIJOS_DB = s.val() || {};
+      var orgTab = document.getElementById("tab-organigrama");
+      if (orgTab && orgTab.classList.contains("active")) buildOrganigrama();
+    });
+  });
+}
+
+function getFijosByPos(pos) {
+  var result = [];
+  var keys = Object.keys(FIJOS_DB);
+  for (var i = 0; i < keys.length; i++) {
+    if (FIJOS_DB[keys[i]].pos === pos) result.push(FIJOS_DB[keys[i]]);
+  }
+  result.sort(function(a, b) { return (a.order||0) - (b.order||0); });
+  return result;
+}
+
+function renderFijosBlock(pos) {
+  var items = getFijosByPos(pos);
+  var html = '';
+  for (var i = 0; i < items.length; i++) {
+    html += '<div class="org-fijo">'
+      + '<span class="org-fijo-txt">' + items[i].txt + '</span>'
+      + '<span class="org-fijo-btns">'
+      + '<button class="org-fijo-btn edit" data-edit-fijo="' + items[i].id + '">&#9998;</button>'
+      + '<button class="org-fijo-btn del"  data-del-fijo="'  + items[i].id + '">&#10005;</button>'
+      + '</span></div>';
+  }
+  html += '<button class="org-add-fijo" data-add-fijo="' + pos + '">+ Anadir elemento</button>';
+  return html;
+}
+
+function openFijoModal(id, pos) {
+  curFijoId  = id  || null;
+  curFijoPos = pos || null;
+  document.getElementById('mfijoTitle').textContent = id ? 'Editar elemento' : 'Nuevo elemento';
+  document.getElementById('mfijoText').value = (id && FIJOS_DB[id]) ? FIJOS_DB[id].txt : '';
+  document.getElementById('mfijoOverlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('mfijoText').focus(); }, 100);
+}
+
+function closeFijoModal() {
+  document.getElementById('mfijoOverlay').classList.remove('open');
+}
+
+function saveFijo() {
+  var txt = document.getElementById('mfijoText').value.trim();
+  if (!txt) { alert('Introduce el texto del elemento.'); return; }
+  var id    = curFijoId || ('fijo_' + Date.now());
+  var pos   = curFijoPos || (FIJOS_DB[curFijoId] ? FIJOS_DB[curFijoId].pos : 'apertura');
+  var order = FIJOS_DB[id] ? (FIJOS_DB[id].order||0) : Object.keys(FIJOS_DB).length + 1;
+  fbFijos.child(id).set({id:id, pos:pos, txt:txt, order:order});
+  closeFijoModal();
+}
+
+function deleteFijo(id) {
+  if (!confirm('Borrar este elemento?')) return;
+  fbFijos.child(id).remove();
+}
+
+// ─── MAIN BUILD ──────────────────────────────────────────────────────────
+function buildOrganigrama() {
+  var container = document.getElementById('orgDesfile');
+  if (!container) return;
+
+  // 1. Get attending populations from DB (status strictly 'asiste')
+  //    Use same access pattern as renderGrid: getDB(p.n)
+  var attending = [];
+  for (var i = 0; i < POBS.length; i++) {
+    var d = getDB(POBS[i].n);
+    if (d && d.status === 'asiste') {
+      attending.push(POBS[i]);
+    }
+  }
+  attending.sort(function(a, b) {
+    // Normalize: replace LL with a character that sorts after L but before M
+    function norm(s) {
+      return s.toLowerCase()
+        .replace(/^l'/, 'la')      // L'Olleria -> laolleria
+        .replace(/^los /, 'los ')  // preserve Los
+        .replace(/ll/g, 'lz');     // ll -> lz so it sorts after l
+    }
+    return norm(a.n).localeCompare(norm(b.n), 'es');
+  });
+
+  // Debug info
+  var debugInfo = 'Poblaciones ASISTE encontradas: ' + attending.length;
+  debugInfo += ' | DB keys: ' + Object.keys(DB).length;
+  debugInfo += ' | BANDAS: ' + Object.keys(BANDAS||{}).length;
+  console.log('ORGANIGRAMA DEBUG:', debugInfo);
+  console.log('Attending:', attending.map(function(p){return p.n;}).join(', '));
+
+  if (!attending.length) {
+    container.innerHTML = '<div style="padding:50px;text-align:center;color:rgba(245,237,224,.3);font-size:.9rem">No hay poblaciones con estado ASISTE todavia. DB tiene ' + Object.keys(DB).length + ' entradas.</div>';
+    return;
+  }
+
+  // 2. Build banda lookup from BANDAS (same object used in renderBandas)
+  var bandas   = BANDAS || {};
+  var bids     = Object.keys(bandas);
+  var mLookup  = {};  // pobName -> banda (mora)
+  var cLookup  = {};  // pobName -> banda (cristiana)
+  var mUsed    = {};
+  var cUsed    = {};
+
+  for (var k = 0; k < bids.length; k++) {
+    var b = bandas[bids[k]];
+    if (!b || !b.poblaciones) continue;
+    for (var m = 0; m < b.poblaciones.length; m++) {
+      var pn = b.poblaciones[m];
+      if (b.bando === 'mora')      mLookup[pn] = {banda: b, id: bids[k]};
+      if (b.bando === 'cristiana') cLookup[pn] = {banda: b, id: bids[k]};
+    }
+  }
+
+  // 3. Helper: render one population row
+  function pobRow(p, bando) {
+    var cls = bando === 'mora' ? 'mora' : 'cristiana';
+    var num, lbl;
+    if (p._virtual) {
+      // Virtual SAX entry - use precomputed fila number
+      num = p._fila;
+      lbl = p.n.toLowerCase().indexOf('especial') >= 0 ? 'Fila Cristiana Especial' : 'Fila Cristiana';
+    } else {
+      var d = getDB(p.n);
+      num = bando === 'mora' ? (d.fmn||0) : (d.fcn||0);
+      lbl = bando === 'mora' ? 'Fila Mora' : 'Fila Cristiana';
+    }
+    var str = lbl + ': ' + num;
+    return '<div class="org-pob ' + cls + '">'
+      + '<span class="org-pob-name">' + p.n + '</span>'
+      + '<span class="org-pob-fila">' + str + '</span>'
+      + '</div>';
+  }
+
+  // 4. Helper: render banda slot for a group of 4 pobs
+  function bandaRow(p1, p2, p3, p4, bando) {
+    var lookup = bando === 'mora' ? mLookup : cLookup;
+    var used   = bando === 'mora' ? mUsed   : cUsed;
+    var pobs4  = [p1, p2, p3, p4];
+    var found  = null, fid = null;
+
+    for (var x = 0; x < pobs4.length; x++) {
+      if (!pobs4[x]) continue;
+      var entry = lookup[pobs4[x].n];
+      if (entry && !used[entry.id]) {
+        found = entry.banda;
+        fid   = entry.id;
+        break;
+      }
+    }
+
+    var cls = bando === 'mora' ? 'mora' : 'cristiana';
+    if (found) {
+      used[fid] = true;
+      var total = 0;
+      for (var p = 0; p < found.poblaciones.length; p++) {
+        var pd = getDB(found.poblaciones[p]);
+        total += bando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+      }
+      var ts = total > 0 ? ' &bull; ' + total + ' pers.' : '';
+      var piezas = '';
+      if (found.pieza1) piezas += '<div class="org-banda-pieza">&#9835; ' + found.pieza1 + '</div>';
+      if (found.pieza2) piezas += '<div class="org-banda-pieza">&#9835; ' + found.pieza2 + '</div>';
+      if (found.pieza3) piezas += '<div class="org-banda-pieza">&#9835; ' + found.pieza3 + '</div>';
+      return '<div class="org-banda ' + cls + '">'
+        + '<div class="org-banda-name">&#127929; ' + found.nombre + '</div>'
+        + '<div class="org-banda-info">Componentes: ' + (found.componentes||0) + ts + '</div>'
+        + piezas
+        + '</div>';
+    }
+    return '<div class="org-banda-empty">&#127929; Sin banda asignada</div>';
+  }
+
+  // 5. Helper: render full bloque (cristiana or mora)
+  function renderBloque(bando) {
+    var baseList = bando === 'mora'
+      ? attending.filter(function(p){ return p.n.toLowerCase() !== 'sax'; })
+      : attending;
+    // For cristiana, expand SAX into SAX CRISTIANA + SAX ESPECIAL
+    var list = [];
+    for (var x = 0; x < baseList.length; x++) {
+      if (bando === 'cristiana' && baseList[x].n.toLowerCase() === 'sax') {
+        var dSax = getDB(baseList[x].n);
+        list.push({n: 'Sax Cristiana', a: baseList[x].a, _virtual: true, _fila: dSax.fcn||0});
+        list.push({n: 'Sax Especial',  a: baseList[x].a, _virtual: true, _fila: dSax.fmn||0});
+      } else {
+        list.push(baseList[x]);
+      }
+    }
+    var html = '';
+    for (var i = 0; i < list.length; i += 4) {
+      if (i > 0) html += '<div class="org-sep"></div>';
+      var p1 = list[i]   || null;
+      var p2 = list[i+1] || null;
+      var p3 = list[i+2] || null;
+      var p4 = list[i+3] || null;
+      if (p1) html += pobRow(p1, bando);
+      if (p2) html += pobRow(p2, bando);
+      html += bandaRow(p1, p2, p3, p4, bando);
+      if (p3) html += pobRow(p3, bando);
+      if (p4) html += pobRow(p4, bando);
+    }
+    return html;
+  }
+
+  // 6. Assemble full organigrama
+  var html = '';
+  html += '<div class="org-bloque-header apertura">APERTURA</div>';
+  html += renderFijosBlock('apertura');
+  html += '<div class="org-bloque-header cristiana">BLOQUE CRISTIANO</div>';
+  html += '<div class="org-fijo"><span class="org-fijo-txt">Cabo Batidor Cristiano (Caballo)</span></div>';
+  html += renderBloque('cristiana');
+  html += '<div class="org-bloque-header central">BLOQUE CENTRAL</div>';
+  html += renderFijosBlock('central');
+  html += '<div class="org-bloque-header mora">BLOQUE MORO</div>';
+  html += '<div class="org-fijo"><span class="org-fijo-txt">Cabo Batidor Moro (Caballo)</span></div>';
+  html += renderBloque('mora');
+  html += '<div class="org-bloque-header final">FINAL</div>';
+  html += renderFijosBlock('final');
+
+  container.innerHTML = html;
+}
+
+
+
+// ═══════════════════════════════════════════════
+// EXPORT PDF - BANDAS Y ORGANIGRAMA
+// ═══════════════════════════════════════════════
+
+function exportBandasPDF() {
+  var bandas = BANDAS || {};
+  var bids   = Object.keys(bandas);
+
+  if (!bids.length) { alert('No hay bandas registradas.'); return; }
+
+  // Sort by bando then name
+  bids.sort(function(a, b) {
+    var ba = bandas[a], bb = bandas[b];
+    if (ba.bando !== bb.bando) return ba.bando === 'cristiana' ? -1 : 1;
+    return (ba.nombre||'').localeCompare(bb.nombre||'', 'es');
+  });
+
+  var totalMora = 0, totalCrist = 0, totalComp = 0;
+  var rows = '';
+  for (var i = 0; i < bids.length; i++) {
+    var b = bandas[bids[i]];
+    var total = 0;
+    var pobsList = '';
+    if (b.poblaciones && b.poblaciones.length) {
+      for (var p = 0; p < b.poblaciones.length; p++) {
+        var pd = getDB(b.poblaciones[p]);
+        total += b.bando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+        pobsList += b.poblaciones[p] + (p < b.poblaciones.length-1 ? ', ' : '');
+      }
+    }
+    var bcolor = b.bando === 'mora' ? '#1a4a6b' : '#6b3a00';
+    var blabel = b.bando === 'mora' ? 'MORO' : 'CRISTIANO';
+    var bg     = b.bando === 'mora' ? '#e8f4fd' : '#fdf5e8';
+    if (b.bando === 'mora') totalMora++; else totalCrist++;
+    totalComp += (b.componentes||0);
+    rows += '<tr style="background:' + bg + '">'
+      + '<td style="font-weight:700;font-size:10pt">' + (b.nombre||'-') + '</td>'
+      + '<td style="text-align:center"><span style="background:' + bcolor + ';color:#fff;padding:2px 8px;border-radius:3px;font-size:8pt;font-weight:700">' + blabel + '</span></td>'
+      + '<td>' + (b.origen||'-') + '</td>'
+      + '<td style="text-align:center;font-weight:700">' + (b.componentes||0) + '</td>'
+      + '<td style="text-align:center;font-weight:700;color:#2d7a50">' + total + '</td>'
+      + '<td style="font-size:8pt">' + (pobsList||'-') + '</td>'
+      + '</tr>';
+  }
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    + '<title>Bandas Asistentes - Convencion</title>'
+    + '<style>'
+    + 'body{font-family:Arial,sans-serif;margin:15mm;color:#222;}'
+    + 'h1{font-size:16pt;color:#8b1a1a;border-bottom:3px solid #8b1a1a;padding-bottom:6px;margin-bottom:4px;}'
+    + 'h2{font-size:10pt;color:#555;margin-bottom:14px;}'
+    + '.stats{display:flex;gap:20px;margin-bottom:16px;}'
+    + '.stat{background:#f5f0e8;border-left:4px solid #8b1a1a;padding:6px 14px;border-radius:3px;}'
+    + '.stat b{display:block;font-size:16pt;color:#8b1a1a;}'
+    + '.stat span{font-size:8pt;color:#666;text-transform:uppercase;letter-spacing:.05em;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:9pt;}'
+    + 'th{background:#8b1a1a;color:#c9a84c;padding:8px 6px;text-align:left;font-size:9pt;letter-spacing:.05em;}'
+    + 'td{padding:7px 6px;border-bottom:1px solid #ddd;vertical-align:top;}'
+    + 'tfoot td{background:#f5f0e8;font-weight:700;border-top:2px solid #8b1a1a;}'
+    + '@media print{body{margin:10mm;}}'
+    + '</style></head><body>'
+    + '<h1>Bandas Asistentes al Desfile</h1>'
+    + '<h2>Convencion de Moros y Cristianos &mdash; Relacion de Bandas</h2>'
+    + '<div class="stats">'
+    + '<div class="stat"><b>' + bids.length + '</b><span>Total Bandas</span></div>'
+    + '<div class="stat"><b>' + totalCrist + '</b><span>Bando Cristiano</span></div>'
+    + '<div class="stat"><b>' + totalMora + '</b><span>Bando Moro</span></div>'
+    + '<div class="stat"><b>' + totalComp + '</b><span>Componentes Totales</span></div>'
+    + '</div>'
+    + '<table>'
+    + '<thead><tr><th>NOMBRE BANDA</th><th>BANDO</th><th>ORIGEN</th><th>COMP.</th><th>ACOMP.</th><th>POBLACIONES QUE ACOMPANA</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody>'
+    + '</table>'
+    + '<p style="margin-top:20px;font-size:7pt;color:#aaa;text-align:right">Generado: ' + new Date().toLocaleDateString('es-ES') + '</p>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank', 'width=1000,height=700');
+  if (w) { w.document.write(html); w.document.close(); setTimeout(function(){ w.print(); }, 600); }
+}
+
+function exportOrgPDF() {
+  // Get attending populations
+  var attending = [];
+  for (var i = 0; i < POBS.length; i++) {
+    var d = getDB(POBS[i].n);
+    if (d && d.status === 'asiste') attending.push(POBS[i]);
+  }
+  attending.sort(function(a, b) {
+    // Normalize: replace LL with a character that sorts after L but before M
+    function norm(s) {
+      return s.toLowerCase()
+        .replace(/^l'/, 'la')      // L'Olleria -> laolleria
+        .replace(/^los /, 'los ')  // preserve Los
+        .replace(/ll/g, 'lz');     // ll -> lz so it sorts after l
+    }
+    return norm(a.n).localeCompare(norm(b.n), 'es');
+  });
+
+  if (!attending.length) { alert('No hay poblaciones con estado ASISTE.'); return; }
+
+  var bandas  = BANDAS || {};
+  var bids    = Object.keys(bandas);
+  var mLookup = {}, cLookup = {};
+  for (var k = 0; k < bids.length; k++) {
+    var b = bandas[bids[k]];
+    if (!b || !b.poblaciones) continue;
+    for (var m = 0; m < b.poblaciones.length; m++) {
+      if (b.bando === 'mora')      mLookup[b.poblaciones[m]] = b;
+      if (b.bando === 'cristiana') cLookup[b.poblaciones[m]] = b;
+    }
+  }
+
+  function getTotal(banda, bando) {
+    var t = 0;
+    if (!banda || !banda.poblaciones) return t;
+    for (var p = 0; p < banda.poblaciones.length; p++) {
+      var pd = getDB(banda.poblaciones[p]);
+      t += bando === 'mora' ? (pd.fmn||0) : (pd.fcn||0);
+    }
+    return t;
+  }
+
+  function buildBloqueHTML(bando, startNum) {
+    var attendingFiltered = bando === 'mora' ? attending.filter(function(p){ return p.n.toLowerCase() !== 'sax'; }) : attending;
+    var lookup  = bando === 'mora' ? mLookup : cLookup;
+    var used    = {};
+    var color   = bando === 'mora' ? '#1a4a6b' : '#6b3a00';
+    var bgPob   = bando === 'mora' ? '#e8f4fd' : '#fdf5e8';
+    var bgBanda = bando === 'mora' ? '#c8e6f7' : '#f7e0c8';
+    var html    = '';
+    var num     = startNum;
+
+    for (var i = 0; i < attendingFiltered.length; i += 4) {
+      var group = [attendingFiltered[i], attendingFiltered[i+1]||null, attendingFiltered[i+2]||null, attendingFiltered[i+3]||null];
+
+      // 2 before
+      for (var j = 0; j < 2; j++) {
+        if (!group[j]) continue;
+        var d = getDB(group[j].n);
+        var filaNum = bando === 'mora' ? (d.fmn||0) : (d.fcn||0);
+        html += '<tr style="background:' + bgPob + '">'
+          + '<td style="padding:5px 8px;font-weight:600">' + group[j].n + '</td>'
+          + '<td style="padding:5px 8px;text-align:center">' + filaNum + '</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '</tr>';
+      }
+
+      // Banda
+      var banda = null;
+      for (var x = 0; x < group.length; x++) {
+        if (group[x] && lookup[group[x].n] && !used[lookup[group[x].n].nombre]) {
+          banda = lookup[group[x].n]; break;
+        }
+      }
+      if (banda) {
+        used[banda.nombre] = true;
+        var total = getTotal(banda, bando);
+        var piezasPdf = '';
+        if (banda.pieza1) piezasPdf += '<br><span style="font-weight:400;font-size:8pt;color:#8b5a00">&#9835; ' + banda.pieza1 + '</span>';
+        if (banda.pieza2) piezasPdf += '<br><span style="font-weight:400;font-size:8pt;color:#8b5a00">&#9835; ' + banda.pieza2 + '</span>';
+        if (banda.pieza3) piezasPdf += '<br><span style="font-weight:400;font-size:8pt;color:#8b5a00">&#9835; ' + banda.pieza3 + '</span>';
+        html += '<tr style="background:' + bgBanda + ';font-weight:700">'
+          + '<td style="padding:6px 8px;color:' + color + '">&#127929; ' + banda.nombre + piezasPdf + '</td>'
+          + '<td style="padding:6px 8px;text-align:center;color:' + color + '">' + total + '</td>'
+          + '<td style="padding:6px 8px;text-align:center;color:#555">' + (banda.componentes||0) + '</td>'
+          + '<td style="padding:6px 8px;text-align:center;font-size:8pt;color:#555">' + (banda.origen||'-') + '</td>'
+          + '</tr>';
+      } else {
+        html += '<tr style="background:#f0f0f0">'
+          + '<td colspan="4" style="padding:5px 8px;color:#aaa;font-style:italic;text-align:center">&#127929; Musica ' + num + ' — Sin banda asignada</td>'
+          + '</tr>';
+      }
+      num++;
+
+      // 2 after
+      for (var j = 2; j < 4; j++) {
+        if (!group[j]) continue;
+        var d2 = getDB(group[j].n);
+        var filaNum2 = bando === 'mora' ? (d2.fmn||0) : (d2.fcn||0);
+        html += '<tr style="background:' + bgPob + '">'
+          + '<td style="padding:5px 8px;font-weight:600">' + group[j].n + '</td>'
+          + '<td style="padding:5px 8px;text-align:center">' + filaNum2 + '</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '<td style="padding:5px 8px;text-align:center;color:#888">—</td>'
+          + '</tr>';
+      }
+
+      // Separator row
+      if (i + 4 < attending.length) {
+        html += '<tr><td colspan="4" style="padding:3px 0;background:#fff;border-bottom:2px solid #c9a84c"></td></tr>';
+      }
+    }
+    return html;
+  }
+
+  // Get fijos
+  function getFijosHTML(pos) {
+    var html = '';
+    var items = getFijosByPos(pos);
+    for (var i = 0; i < items.length; i++) {
+      html += '<tr style="background:#fff8e8"><td colspan="4" style="padding:5px 8px;color:#8b5a00;font-style:italic">' + items[i].txt + '</td></tr>';
+    }
+    return html;
+  }
+
+  function bloqueHeader(txt, color, bg) {
+    return '<tr><td colspan="4" style="background:' + bg + ';color:' + color + ';font-weight:700;font-size:11pt;padding:8px;letter-spacing:.05em;text-align:center">' + txt + '</td></tr>';
+  }
+
+  var totalAsiste = attending.length;
+  var totalFilaC  = 0, totalFilaM = 0;
+  for (var i = 0; i < attending.length; i++) {
+    var d = getDB(attending[i].n);
+    totalFilaC += (d.fcn||0);
+    totalFilaM += (d.fmn||0);
+  }
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    + '<title>Organigrama del Desfile</title>'
+    + '<style>'
+    + 'body{font-family:Arial,sans-serif;margin:10mm;color:#222;font-size:9pt;}'
+    + 'h1{font-size:14pt;color:#8b1a1a;border-bottom:3px solid #8b1a1a;padding-bottom:5px;margin-bottom:4px;}'
+    + 'h2{font-size:9pt;color:#555;margin-bottom:10px;}'
+    + '.stats{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;}'
+    + '.stat{background:#f5f0e8;border-left:3px solid #8b1a1a;padding:4px 10px;border-radius:3px;}'
+    + '.stat b{display:block;font-size:13pt;color:#8b1a1a;}'
+    + '.stat span{font-size:7pt;color:#666;text-transform:uppercase;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:8.5pt;page-break-inside:auto;}'
+    + 'tr{page-break-inside:avoid;}'
+    + 'th{background:#8b1a1a;color:#c9a84c;padding:6px 8px;text-align:left;}'
+    + 'td{border-bottom:1px solid #eee;}'
+    + '@media print{body{margin:8mm;}h1{font-size:12pt;}}'
+    + '</style></head><body>'
+    + '<h1>Organigrama del Desfile &mdash; Convencion Moros y Cristianos</h1>'
+    + '<h2>Poblaciones ordenadas alfabeticamente &bull; Bandas segun asignacion</h2>'
+    + '<div class="stats">'
+    + '<div class="stat"><b>' + totalAsiste + '</b><span>Poblaciones Asisten</span></div>'
+    + '<div class="stat"><b>' + totalFilaC + '</b><span>Total Fila Cristiana</span></div>'
+    + '<div class="stat"><b>' + totalFilaM + '</b><span>Total Fila Mora</span></div>'
+    + '<div class="stat"><b>' + (totalFilaC + totalFilaM) + '</b><span>Total Desfilantes</span></div>'
+    + '</div>'
+    + '<table>'
+    + '<thead><tr><th>POBLACION / BANDA</th><th style="text-align:center;width:60px">FILA</th><th style="text-align:center;width:60px">COMP.</th><th style="text-align:center;width:80px">ORIGEN</th></tr></thead>'
+    + '<tbody>'
+    // APERTURA
+    + bloqueHeader('APERTURA', '#8b5a00', '#fff3cd')
+    + getFijosHTML('apertura')
+    // BLOQUE CRISTIANO
+    + bloqueHeader('BLOQUE CRISTIANO', '#fff', '#8b5a00')
+    + '<tr style="background:#fdf5e8"><td colspan="4" style="padding:4px 8px;font-style:italic;color:#8b5a00">Cabo Batidor Cristiano (Caballo)</td></tr>'
+    + buildBloqueHTML('cristiana', 1)
+    // BLOQUE CENTRAL
+    + bloqueHeader('BLOQUE CENTRAL', '#fff', '#8b1a1a')
+    + getFijosHTML('central')
+    // BLOQUE MORO
+    + bloqueHeader('BLOQUE MORO', '#fff', '#1a4a6b')
+    + '<tr style="background:#e8f4fd"><td colspan="4" style="padding:4px 8px;font-style:italic;color:#1a4a6b">Cabo Batidor Moro (Caballo)</td></tr>'
+    + buildBloqueHTML('mora', 15)
+    // FINAL
+    + bloqueHeader('FINAL', '#2d5a2d', '#e8f5e8')
+    + getFijosHTML('final')
+    + '</tbody></table>'
+    + '<p style="margin-top:14px;font-size:7pt;color:#aaa;text-align:right">Generado: ' + new Date().toLocaleDateString('es-ES') + '</p>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank', 'width=1000,height=700');
+  if (w) { w.document.write(html); w.document.close(); setTimeout(function(){ w.print(); }, 600); }
+}
+
+
+// ═══════════════════════════════════════════════
+// EVENTOS - todo por delegacion en document
+// ═══════════════════════════════════════════════
+document.addEventListener('click', function(e) {
+  var t = e.target.closest ? (e.target.closest('button,[data-pob],[data-banda-id],[data-st],[data-tab],[data-musica],[data-persona],[data-forma],[data-bando],[data-cid],[data-edit-fijo],[data-del-fijo],[data-add-fijo]') || e.target) : e.target;
+
+  // --- TABS ---
+  if (t.classList.contains('nav-tab')) {
+    var tab = t.getAttribute('data-tab');
+    document.querySelectorAll('.nav-tab').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tab-section').forEach(function(s){ s.classList.remove('active'); });
+    t.classList.add('active');
+    var sec = el('tab-'+tab);
+    if (sec) sec.classList.add('active');
+    if (tab === 'bandas')      { renderBandas(); updateBandasStats(); }
+    if (tab === 'organigrama') { buildOrganigrama(); }
+    return;
+  }
+
+  // --- POBLACIONES GRID ---
+  var card = t.closest ? t.closest('[data-pob]') : null;
+  if (card && el('grid') && el('grid').contains(card)) {
+    openModal(card.getAttribute('data-pob')); return;
+  }
+
+  // --- MODAL POBLACION ---
+  if (t.id === 'mClose' || t.id === 'overlay') { closeModal(); return; }
+
+  if (t.getAttribute('data-st')) {
+    var st = t.getAttribute('data-st');
+    if (curPob) {
+      var key = encodeKey(curPob);
+      if (!DB[key]) DB[key] = {};
+      DB[key].status = st;
+      activateStatus(st);
+    }
+    return;
+  }
+
+  if (t.getAttribute('data-tab') === 'musica' || t.getAttribute('data-tab') === 'general') {
+    document.querySelectorAll('.tbtn').forEach(function(b){ b.classList.remove('on'); });
+    t.classList.add('on');
+    el('musSec').classList.toggle('show', t.getAttribute('data-tab')==='musica');
+    return;
+  }
+
+  if (t.getAttribute('data-musica')) { activateMusica(t.getAttribute('data-musica')); return; }
+  if (t.getAttribute('data-persona')){ activatePersona(t.getAttribute('data-persona')); return; }
+
+  if (t.getAttribute('data-forma')) {
+    activateForma(t.getAttribute('data-forma')); return;
+  }
+
+  if (t.getAttribute('data-cid')) {
+    changeCount(t.getAttribute('data-cid'), parseInt(t.getAttribute('data-d'))); return;
+  }
+
+  if (t.id === 'btnSave')   { savePob(); return; }
+  if (t.id === 'btnDelete') { el('confirmOverlay').classList.add('open'); return; }
+  if (t.id === 'confirmYes'){ el('confirmOverlay').classList.remove('open'); deletePob(); return; }
+  if (t.id === 'confirmNo') { el('confirmOverlay').classList.remove('open'); return; }
+
+  if (t.id === 'btnExcel')  { exportExcel(); return; }
+  if (t.id === 'btnPdf')    { exportPDF(); return; }
+
+  // --- BANDAS ---
+  // --- FIJOS ORGANIGRAMA ---
+  if (t.getAttribute('data-edit-fijo')) { openFijoModal(t.getAttribute('data-edit-fijo'), null); return; }
+  if (t.getAttribute('data-del-fijo'))  { deleteFijo(t.getAttribute('data-del-fijo')); return; }
+  if (t.getAttribute('data-add-fijo'))  { openFijoModal(null, t.getAttribute('data-add-fijo')); return; }
+  if (t.id === 'mfijoSave')   { saveFijo(); return; }
+  if (t.id === 'mfijoCancel' || t.id === 'mfijoOverlay') { closeFijoModal(); return; }
+
+  if (t.id === 'btnExportBandas') { exportBandasPDF(); return; }
+  if (t.id === 'btnExportOrg')    { exportOrgPDF(); return; }
+  if (t.id === 'btnAddBanda')     { openBandaModal(null); return; }
+  if (t.id === 'mbandaClose')     { closeBandaModal(); return; }
+  if (t.id === 'mbandaOverlay')   { closeBandaModal(); return; }
+  if (t.id === 'btnSaveBanda')    { saveBanda(); return; }
+  if (t.id === 'btnDelBanda')     { el('confirmOvBanda').classList.add('open'); return; }
+  if (t.id === 'confirmYesBanda') { el('confirmOvBanda').classList.remove('open'); deleteBanda(); return; }
+  if (t.id === 'confirmNoBanda')  { el('confirmOvBanda').classList.remove('open'); return; }
+
+  if (t.getAttribute('data-bando')) { activateBando(t.getAttribute('data-bando')); return; }
+
+  var bandaCard = t.closest ? t.closest('[data-banda-id]') : null;
+  if (bandaCard) { openBandaModal(bandaCard.getAttribute('data-banda-id')); return; }
+});
+
+// Search + direct export button listeners
+document.addEventListener('DOMContentLoaded', function() {
+  var s = el('srch');
+  if (s) s.addEventListener('input', function() {
+    renderGrid(currentFilter());
+  });
+  // Direct listeners for export buttons (more reliable than delegation)
+  var bExp = document.getElementById('btnExportBandas');
+  if (bExp) bExp.addEventListener('click', function(e) { e.stopPropagation(); exportBandasPDF(); });
+  var oExp = document.getElementById('btnExportOrg');
+  if (oExp) oExp.addEventListener('click', function(e) { e.stopPropagation(); exportOrgPDF(); });
+});
+
+</script>
+</body>
+</html>
